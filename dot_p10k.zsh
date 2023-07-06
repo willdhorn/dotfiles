@@ -30,9 +30,6 @@
   # Zsh >= 5.1 is required.
   autoload -Uz is-at-least && is-at-least 5.1 || return
 
-  # Custom shell level prompt element (how many shells deep are we right now)
-  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $(printf '%.s\uE691' $(seq 1 $((SHLVL - 1))) | tr -d '\n'; [[ $((SHLVL - 1)) -gt 2 ]] && echo "'\$$((SHLVL - 1))'")"
-
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
@@ -181,6 +178,12 @@
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_LAST_SEGMENT_END_SYMBOL=''
   # Left prompt terminator for lines without any segments.
   typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=
+
+
+  #################################[ custom_shell_level: current shell level]##################################
+  # Custom shell level prompt element (how many shells deep are we right now)
+  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $(printf '%.s\uE691' $(seq 1 $((SHLVL - 1))) | tr -d '\n'; [[ $((SHLVL - 1)) -gt 2 ]] && echo "'\$$((SHLVL - 1))'")"
+  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL_BACKGROUND=51
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
