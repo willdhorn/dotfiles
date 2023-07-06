@@ -31,7 +31,7 @@
   autoload -Uz is-at-least && is-at-least 5.1 || return
 
   # Custom shell level prompt element (how many shells deep are we right now)
-POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $(printf '%.s\ue691' $(seq 1 $((SHLVL - 1))) | tr -d '\n'; [[ $((SHLVL - 1)) -gt 2 ]] && echo "'\$$((SHLVL - 1))}'")"
+  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $(printf '%.s\uE691' $(seq 1 $((SHLVL - 1))) | tr -d '\n'; [[ $((SHLVL - 1)) -gt 2 ]] && echo "'\$$((SHLVL - 1))'")"
 
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
