@@ -182,7 +182,8 @@
 
   #################################[ custom_shell_level: current shell level]##################################
   # Custom shell level prompt element (how many shells deep are we right now)
-  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $(printf '%.s\uE691' $(seq 1 $((SHLVL - 1))) | tr -d '\n'; [[ $((SHLVL - 1)) -gt 2 ]] && echo "'\$$((SHLVL - 1))'")"
+  shell_level_element(){awk -v n=$((SHLVL - 1)) 'BEGIN{if(n<=3) for(i=1;i<=n;i++) if(i==n) printf ""; else printf ""; else printf ""n""}'}
+  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="shell_level_element"
   typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL_BACKGROUND=51
 
   #################################[ os_icon: os identifier ]##################################
