@@ -1,0 +1,41 @@
+# This is Git's per-user configuration file.
+[user]
+	name = will
+	email = 88556285+willdhorn@users.noreply.github.com
+[alias]
+	can = commit --amend --no-edit
+	ca = commit --amend
+	co = checkout
+	br = branch
+	unstage = reset --soft HEAD^
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	la = "!git config -l | grep alias | cut -c 7-"
+	ours = "!f() { git co --ours $@ && git add $@; }; f"
+	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+	# rename [branch] to done-[branch]
+	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
+	ala = "!f() { x="$1"; shift; git config --global --replace-all alias.$x \"$*\"; }; f"
+	cp = cherry-pick
+	f = ls-files --deduplicate
+	pf = push -f
+	aa = add -A
+	c = commit
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[init]
+	defaultBranch = main
+[merge]
+	tool = vscode
+[mergetool "vscode"]
+	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
+[diff]
+	tool = vscode
+	algorithm = histogram
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[core]
+	excludesFile = ~/user-configs/gitignore
