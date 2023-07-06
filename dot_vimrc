@@ -3,12 +3,15 @@ filetype on
 set number
 set cursorline
 
-"line number column
+" shiftwidth=4 tabstop=4 expandtab
+set sw=4 sts=4 et
+
+" line number column
 hi LineNr ctermbg=black
 hi LineNr ctermfg=white
 hi SignColumn ctermbg=black
-"line number color for current line
+" line number color for current line
 hi CursorLineNr ctermfg=red
-"make comments dark
+" make comments dark
 hi comment ctermfg=black
 
