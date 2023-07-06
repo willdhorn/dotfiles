@@ -17,10 +17,12 @@ source $CFG_DIR/zshrc_default
 # User aliases
 source $CFG_DIR/aliases
 
+{{ if eq .chezmoi.os "darwin" }}
 # ----- pyenv -----
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 # ----------------
+{{ end }}
 
 # add user bin to path
 export PATH=$HOME/.local/bin:$PATH
@@ -95,9 +97,6 @@ h() {
 zstyle ':fzf-tab:*' fzf-flags --bind 'tab:accept'
 
 
-alias vz='vim ~/.zshrc'
-alias sz='source ~/.zshrc'
-
 #### END CONFIGS ####
 
 # Set up iTerm2 shell integration
@@ -106,5 +105,7 @@ if [ -f "${HOME}/.iterm2_shell_integration.zsh" ]; then
 fi
 
 
+{{ if eq .chezmoi.os "darwin" }}
 eval $(thefuck --alias)
+{{ end }}
 bindkey "^U" backward-kill-line
