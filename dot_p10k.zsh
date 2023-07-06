@@ -30,10 +30,14 @@
   # Zsh >= 5.1 is required.
   autoload -Uz is-at-least && is-at-least 5.1 || return
 
+  # Custom shell level prompt element (how many shells deep are we right now)
+  POWERLEVEL9K_CUSTOM_SHELL_LEVEL="echo $SHLVL"
+
   # The list of segments shown on the left. Fill it with the most important segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     os_icon                 # os identifier
+    custom_shell_level      # current shell level
     dir                     # current directory
     vcs                     # git status
     # =========================[ Line #2 ]=========================
