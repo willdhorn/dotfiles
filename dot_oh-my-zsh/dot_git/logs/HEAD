@@ -1,0 +1,3 @@
+0000000000000000000000000000000000000000 e1a8d7c9772db760a77b83cf945fcd8b1fc08129 William Hornsby <whornsby@Williams-MBP.(none)> 1583809151 -0700	clone: from https://github.com/ohmyzsh/ohmyzsh.git
+e1a8d7c9772db760a77b83cf945fcd8b1fc08129 2560f04982dfc2693221c7c0f47d1a71df09a794 William Hornsby <whornsby@Williams-MacBook-Pro.local> 1587778196 -0700	pull --rebase --stat origin master: checkout 2560f04982dfc2693221c7c0f47d1a71df09a794
+2560f04982dfc2693221c7c0f47d1a71df09a794 2560f04982dfc2693221c7c0f47d1a71df09a794 William Hornsby <whornsby@Williams-MacBook-Pro.local> 1587778196 -0700	rebase finished: refs/heads/master onto 2560f04982dfc2693221c7c0f47d1a71df09a794
