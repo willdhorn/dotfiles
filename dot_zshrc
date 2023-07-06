@@ -69,7 +69,8 @@ source $ZSH/oh-my-zsh.sh
 setopt inc_append_history
 unsetopt share_history
 
-
+# use global gitignore
+git config --global core.excludesFile '~/user-configs/gitignore'
 
 #### FUNCTIONS ####
 
