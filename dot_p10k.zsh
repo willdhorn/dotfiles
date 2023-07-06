@@ -184,7 +184,7 @@
   # Custom shell level prompt element (how many shells deep are we right now)
   shell_level_element(){awk -v n=$((SHLVL - 1)) 'BEGIN{if(n<=3) for(i=1;i<=n;i++) if(i==n) printf ""; else printf ""; else printf ""n""}'}
   typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="shell_level_element"
-  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL_BACKGROUND=51
+  typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL_BACKGROUND=83
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
