@@ -1,0 +1,14 @@
+syntax on
+filetype on
+set number
+set cursorline
+
+"line number column
+hi LineNr ctermbg=black
+hi LineNr ctermfg=white
+hi SignColumn ctermbg=black
+"line number color for current line
+hi CursorLineNr ctermfg=red
+"make comments dark
+hi comment ctermfg=black
+
