@@ -39,14 +39,15 @@ autoload -U compinit; compinit
 plugins=(
     colored-man-pages
     colorize
+{{ if eq .chezmoi.os "darwin" }}
     osx
+    fzf-tab
+{{ end }}
     gnu-utils
     gitfast
-    fzf-tab
     zsh-interactive-cd
 #    zsh-autosuggestions
 #    z
-#    web-search
     zsh-syntax-highlighting
 )
 # Note zsh-syntax-highlighting must be the last one
@@ -74,6 +75,9 @@ unsetopt share_history
 # use global gitignore
 git config --global core.excludesFile '~/user-configs/gitignore'
 
+# increase file limit above default of "256 unlimited" 
+sudo launchctl limit maxfiles 65536 200000
+
 #### FUNCTIONS ####
 
 # ping function that uses ssh hosts
@@ -88,6 +92,7 @@ $ () {
     "$@"
 }
 
+{{ if eq .chezmoi.os "darwin" }}
 # h - fzf History - Repeat command history history
 h() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
@@ -95,6 +100,7 @@ h() {
 
 # fzf-tab select with tab
 zstyle ':fzf-tab:*' fzf-flags --bind 'tab:accept'
+{{ end }}
 
 
 #### END CONFIGS ####
