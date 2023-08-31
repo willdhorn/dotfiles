@@ -75,9 +75,11 @@ unsetopt share_history
 # use global gitignore
 git config --global core.excludesFile '~/user-configs/gitignore'
 
+{{ if eq .chezmoi.os "darwin" }}
 # increase file limit above default of "256 unlimited" 
-sudo launchctl limit maxfiles 65536 200000
-
+# sudo launchctl limit maxfiles 65536 200000
+alias fixfilelimit="sudo launchctl limit maxfiles 65536 200000"
+{{ end }}
 #### FUNCTIONS ####
 
 # ping function that uses ssh hosts
@@ -91,6 +93,8 @@ $ () {
     echo ""
     "$@"
 }
+
+
 
 {{ if eq .chezmoi.os "darwin" }}
 # h - fzf History - Repeat command history history
