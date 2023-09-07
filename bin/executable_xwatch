@@ -25,6 +25,9 @@ last_event=0
 # Initialize the event that triggered the last command to run to 0
 last_triggered_event=0
 
+# File to store the last event time in the system's temporary directory
+last_event_file="$(mktemp -t last_event)"
+
 # Initialize the indentation level
 indentation_level=$default_indentation_level
 
