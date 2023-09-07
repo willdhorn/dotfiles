@@ -22,17 +22,17 @@ fswatch_pid=""
 # Initialize the last event time to 0
 last_event=0
 
-# Initialize the event that triggered the last command to run to 0
-last_triggered_event=0
+# Initialize the event count of the last triggered event to 0
+last_triggered_event_count=0
 
 # File to store the last event time in the system's temporary directory
 last_event_file="$(mktemp -t last_event)"
 
+# File to store the total event count in the system's temporary directory
+total_event_count_file="$(mktemp -t total_event_count)"
+
 # Initialize the indentation level
 indentation_level=$default_indentation_level
-
-# Initialize the event counter
-event_count=0
 
 # Initialize the state variable
 state="Waiting"
@@ -50,7 +50,7 @@ cyan=$(tput setaf 6)
 run_command() {
     local command="$1"
     print_status_message
-    last_triggered_event=$last_event
+    last_triggered_event_count=$total_event_count # Update the last triggered event count
     eval "$command" | sed "s/^/${green}│${reset}$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
 }
 
@@ -65,7 +65,8 @@ print_status_message() {
             ;;
         "Pending")
             status_message="${bold}${red}Pending${reset}"
-            for _ in $(seq $event_count); do
+            event_diff=$((total_event_count - last_triggered_event_count))
+            for _ in $(seq $event_diff); do
                 status_message="${status_message}${bold}.${reset}"
             done
             ;;
@@ -77,6 +78,7 @@ print_status_message() {
 check_for_changes() {
     current_time=$(date +%s)
     last_event=$(cat "$last_event_file" 2>/dev/null || echo 0)
+    total_event_count=$(cat "$total_event_count_file" 2>/dev/null || echo 0)
 
     time_since_last_event=$((current_time - last_event))
 
@@ -84,7 +86,6 @@ check_for_changes() {
     if [ $last_event -gt $last_triggered_event ]; then
         # Check if the debounce interval has passed
         if [ $time_since_last_event -ge $debounce_interval ]; then
-            event_count=0 # Reset event counter
             state="Running"
             run_command "$1"
             state="Waiting"
@@ -100,8 +101,8 @@ cleanup() {
         echo "Terminating fswatch process (PID: $fswatch_pid)..."
         kill "$fswatch_pid"
     fi
-    # Clean up the last event file
-    rm -f "$last_event_file"
+    # Clean up the last event and total event count files
+    rm -f "$last_event_file" "$total_event_count_file"
     exit 0
 }
 
@@ -149,9 +150,9 @@ fi
 #echo "Sleep interval: $sleep_interval seconds"
 
 echo "0" > "$last_event_file"
+echo "0" > "$total_event_count_file"
 
 if [ "$run_command_on_startup" = true ]; then
-    event_count=0
     state="Running"
     run_command "$command_to_run"
     state="Waiting"
@@ -164,7 +165,8 @@ fswatch -o "${directories_to_watch[@]}" |
 while read; do
     # Update the last event time in the file
     echo "$(date +%s)" > "$last_event_file"
-    ((event_count++)) # Increment event counter
+    total_event_count=$((total_event_count + 1)) # Increment total event count
+    echo "$total_event_count" > "$total_event_count_file" # Update total event count
     state="Pending"
     print_status_message
 done &
