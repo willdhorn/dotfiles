@@ -40,6 +40,7 @@ state="Waiting"
 # Colors and formatting
 bold=$(tput bold)
 reset=$(tput sgr0)
+red=$(tput setaf 1)
 yellow=$(tput setaf 3)
 green=$(tput setaf 2)
 cyan=$(tput setaf 6)
@@ -47,9 +48,9 @@ cyan=$(tput setaf 6)
 # Function to run the provided command with indentation
 run_command() {
     local command="$1"
-    echo " $command" | sed "s/^/$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command
+    print_status_message
     last_triggered_event=$last_event
-    eval "$command" | sed "s/^/$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
+    eval "$command" | sed "s/^/${green}│${reset}$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
 }
 
 # Function to print the status message
@@ -59,10 +60,10 @@ print_status_message() {
             status_message="${bold}${yellow}Waiting${reset}"
             ;;
         "Running")
-            status_message="${bold}${green}Running command...${reset}"
+            status_message="${bold}${green}Running command:${reset} ${command_to_run}"
             ;;
         "Pending")
-            status_message="${bold}${cyan}Pending${reset}"
+            status_message="${bold}${red}Pending${reset}"
             for _ in $(seq $event_count); do
                 status_message="${status_message}${bold}.${reset}"
             done
@@ -85,7 +86,7 @@ check_for_changes() {
             event_count=0 # Reset event counter
             state="Running"
             run_command "$1"
-            state="Pending"
+            state="Waiting"
         fi
     else
         sleep $sleep_interval
@@ -152,7 +153,7 @@ if [ "$run_command_on_startup" = true ]; then
     event_count=0
     state="Running"
     run_command "$command_to_run"
-    state="Pending"
+    state="Waiting"
 fi
 
 print_status_message
