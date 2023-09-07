@@ -6,6 +6,8 @@ default_debounce_interval=2
 default_sleep_interval=1
 # Default value for running the command at startup
 run_command_on_startup=false
+# Default indentation level
+default_indentation_level=2
 
 # Initialize debounce and sleep intervals with defaults
 debounce_interval=$default_debounce_interval
@@ -23,16 +25,47 @@ last_event=0
 # Initialize the event that triggered the last command to run to 0
 last_triggered_event=0
 
-# File to store the last event time in the system's temporary directory
-last_event_file="$(mktemp -t last_event)"
+# Initialize the indentation level
+indentation_level=$default_indentation_level
 
-# Function to run the provided command
+# Initialize the event counter
+event_count=0
+
+# Initialize the state variable
+state="Waiting"
+
+# Colors and formatting
+bold=$(tput bold)
+reset=$(tput sgr0)
+yellow=$(tput setaf 3)
+green=$(tput setaf 2)
+cyan=$(tput setaf 6)
+
+# Function to run the provided command with indentation
 run_command() {
     local command="$1"
-    echo -n "\033[2K\rRunning command: $command"
+    echo " $command" | sed "s/^/$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command
     last_triggered_event=$last_event
-    eval "$command"
-    echo -n "\033[2K\rWaiting"
+    eval "$command" | sed "s/^/$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
+}
+
+# Function to print the status message
+print_status_message() {
+    case "$state" in
+        "Waiting")
+            status_message="${bold}${yellow}Waiting${reset}"
+            ;;
+        "Running")
+            status_message="${bold}${green}Running command...${reset}"
+            ;;
+        "Pending")
+            status_message="${bold}${cyan}Pending${reset}"
+            for _ in $(seq $event_count); do
+                status_message="${status_message}${bold}.${reset}"
+            done
+            ;;
+    esac
+    echo -n "\033[2K\r$status_message"
 }
 
 # Function to check for changes and debounce
@@ -46,7 +79,10 @@ check_for_changes() {
     if [ $last_event -gt $last_triggered_event ]; then
         # Check if the debounce interval has passed
         if [ $time_since_last_event -ge $debounce_interval ]; then
+            event_count=0 # Reset event counter
+            state="Running"
             run_command "$1"
+            state="Pending"
         fi
     else
         sleep $sleep_interval
@@ -68,7 +104,7 @@ cleanup() {
 trap cleanup INT
 
 # Parse command line options
-while getopts "d:c:i:s:n" opt; do
+while getopts "d:c:i:s:ni:" opt; do
     case $opt in
         d)
             directories_to_watch+=("$OPTARG")
@@ -85,8 +121,12 @@ while getopts "d:c:i:s:n" opt; do
         n)
             run_command_on_startup=true
             ;;
+        # Add option for specifying the indentation level
+        i)
+            indentation_level="$OPTARG"
+            ;;
         \?)
-            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n]"
+            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n] [-i <indentation_level>]"
             exit 1
             ;;
     esac
@@ -94,7 +134,7 @@ done
 
 # Check if directories and command are provided
 if [ ${#directories_to_watch[@]} -eq 0 ] || [ -z "$command_to_run" ]; then
-    echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n]"
+    echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n] [-i <indentation_level>]"
     exit 1
 fi
 
@@ -106,23 +146,28 @@ fi
 echo "0" > "$last_event_file"
 
 if [ "$run_command_on_startup" = true ]; then
+    event_count=0
+    state="Running"
     run_command "$command_to_run"
+    state="Pending"
 fi
 
-echo -n "\033[2K\rWaiting"
+print_status_message
 
 # Start fswatch to monitor all specified directories
 fswatch -o "${directories_to_watch[@]}" |
 while read; do
     # Update the last event time in the file
     echo "$(date +%s)" > "$last_event_file"
-    echo -n "."
+    ((event_count++)) # Increment event counter
+    state="Pending"
+    print_status_message
 done &
 fswatch_pid=$$
 
 # Continuously check for changes in the foreground and run the specified command
 while true; do
-    # Pass the last triggered event to check_for_changes
+    print_status_message
     check_for_changes "$command_to_run"
 done
 
