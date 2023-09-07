@@ -1,0 +1,125 @@
+#!/bin/zsh
+
+# Default debounce interval in seconds
+default_debounce_interval=2
+# Default sleep interval in seconds when no command is run
+default_sleep_interval=1
+
+# Initialize debounce and sleep intervals with defaults
+debounce_interval=$default_debounce_interval
+sleep_interval=$default_sleep_interval
+
+# Initialize an array to store directories to watch
+directories_to_watch=()
+
+# Initialize the fswatch process ID
+fswatch_pid=""
+
+# Initialize the last time the command ran
+last_run_time=0
+
+# Initialize the last event time to 0
+last_event=0
+
+# File to store the last event time in the system's temporary directory
+last_event_file="$(mktemp -t last_event)"
+
+# Function to run the provided command
+run_command() {
+    local command="$1"
+    echo -n "\033[2K\rRunning command: $command"
+    eval "$command"
+    # Update the last run time
+    last_run_time=$(date +%s)
+    echo -n "\033[2K\rWaiting"
+}
+
+# Function to check for changes and debounce
+check_for_changes() {
+    current_time=$(date +%s)
+    last_event=$(cat "$last_event_file" 2>/dev/null || echo 0)
+
+    # Check if last_event and last_run_time are valid numeric values
+    if [[ "$last_event" =~ ^[0-9]+$ ]] && [[ "$last_run_time" =~ ^[0-9]+$ ]]; then
+        time_since_last_event=$((current_time - last_event))
+
+        # Check if a new event has occurred
+        if [ $last_event -gt $last_run_time ]; then
+            # Check if the debounce interval has passed
+            if [ $time_since_last_event -ge $debounce_interval ]; then
+                run_command "$1"
+            fi
+        else
+            sleep $sleep_interval
+        fi
+    else
+        # If either last_event or last_run_time is not a valid numeric value, sleep for the sleep_interval
+        sleep $sleep_interval
+    fi
+}
+
+# Function to cleanup and terminate the fswatch process
+cleanup() {
+    if [ -n "$fswatch_pid" ]; then
+        echo "Terminating fswatch process (PID: $fswatch_pid)..."
+        kill "$fswatch_pid"
+    fi
+    # Clean up the last event file
+    rm -f "$last_event_file"
+    exit 0
+}
+
+# Trap the INT signal (CTRL+C) and cleanup gracefully
+trap cleanup INT
+
+# Parse command line options
+while getopts "d:c:i:s:" opt; do
+    case $opt in
+        d)
+            directories_to_watch+=("$OPTARG")
+            ;;
+        c)
+            command_to_run="$OPTARG"
+            ;;
+        i)
+            debounce_interval="$OPTARG"
+            ;;
+        s)
+            sleep_interval="$OPTARG"
+            ;;
+        \?)
+            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval>"
+            exit 1
+            ;;
+    esac
+done
+
+# Check if directories and command are provided
+if [ ${#directories_to_watch[@]} -eq 0 ] || [ -z "$command_to_run" ]; then
+    echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval>"
+    exit 1
+fi
+
+# Initial message
+#echo "Watching directories: ${directories_to_watch[*]} and running command: $command_to_run"
+#echo "Debounce interval: $debounce_interval seconds"
+#echo "Sleep interval: $sleep_interval seconds"
+
+echo "0" > "$last_event_file"
+
+echo -n "\033[2K\rWaiting"
+
+# Start fswatch to monitor all specified directories
+fswatch -o "${directories_to_watch[@]}" |
+while read; do
+    # Update the last event time in the file
+    echo "$(date +%s)" > "$last_event_file"
+    echo -n "."
+done &
+fswatch_pid=$$
+
+# Continuously check for changes in the foreground and run the specified command
+while true; do
+    check_for_changes "$command_to_run"
+done
+
