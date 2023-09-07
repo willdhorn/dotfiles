@@ -51,6 +51,7 @@ cyan=$(tput setaf 6)
 run_command() {
     local command="$1"
     print_status_message
+    last_triggered_event=$last_event
     last_triggered_event_count=$total_event_count # Update the last triggered event count
     eval "$command" | sed "s/^/${green}│${reset}$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
 }
