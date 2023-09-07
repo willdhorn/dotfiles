@@ -132,12 +132,8 @@ while getopts "d:c:i:s:ni:" opt; do
         n)
             run_command_on_startup=true
             ;;
-        # Add option for specifying the indentation level
-        i)
-            indentation_level="$OPTARG"
-            ;;
         \?)
-            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n] [-i <indentation_level>]"
+            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n]"
             exit 1
             ;;
     esac
