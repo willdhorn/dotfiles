@@ -60,7 +60,7 @@ print_status_message() {
             status_message="${bold}${yellow}Waiting${reset}"
             ;;
         "Running")
-            status_message="${bold}${green}Running command:${reset} ${command_to_run}"
+            status_message="${bold}${green}Running command:${reset} ${command_to_run}\n"
             ;;
         "Pending")
             status_message="${bold}${red}Pending${reset}"
