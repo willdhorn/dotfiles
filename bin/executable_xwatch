@@ -41,8 +41,9 @@ state="Waiting"
 bold=$(tput bold)
 reset=$(tput sgr0)
 red=$(tput setaf 1)
-yellow=$(tput setaf 3)
 green=$(tput setaf 2)
+blue=$(tput setaf 4)
+yellow=$(tput setaf 3)
 cyan=$(tput setaf 6)
 
 # Function to run the provided command with indentation
@@ -57,7 +58,7 @@ run_command() {
 print_status_message() {
     case "$state" in
         "Waiting")
-            status_message="${bold}${yellow}Waiting${reset}"
+            status_message="${bold}${blue}Waiting${reset}"
             ;;
         "Running")
             status_message="${bold}${green}Running command:${reset} ${command_to_run}\n"
