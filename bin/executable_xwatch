@@ -51,13 +51,14 @@ cyan=$(tput setaf 6)
 run_command() {
     local command="$1"
     print_status_message
-    last_triggered_event=$last_event
-    last_triggered_event_count=$total_event_count # Update the last triggered event count
     eval "$command" | sed "s/^/${green}│${reset}$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
 }
 
 # Function to print the status message
 print_status_message() {
+    if [ $last_event -gt $last_triggered_event ]; then
+        state="Pending"
+    fi
     case "$state" in
         "Waiting")
             status_message="${bold}${blue}Waiting${reset}"
@@ -89,6 +90,8 @@ check_for_changes() {
         # Check if the debounce interval has passed
         if [ $time_since_last_event -ge $debounce_interval ]; then
             state="Running"
+            last_triggered_event=$last_event
+            last_triggered_event_count=$total_event_count # Update the last triggered event count
             run_command "$1"
             state="Waiting"
         fi
@@ -170,7 +173,6 @@ while read; do
     total_event_count=$((total_event_count + 1)) # Increment total event count
     echo "$total_event_count" > "$total_event_count_file" # Update total event count
     state="Pending"
-    print_status_message
 done &
 fswatch_pid=$$
 
