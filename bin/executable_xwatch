@@ -21,6 +21,7 @@ fswatch_pid=""
 
 # Initialize the last event time to 0
 last_event=0
+last_triggered_event=0
 
 # Initialize the event count of the last triggered event to 0
 last_triggered_event_count=0
