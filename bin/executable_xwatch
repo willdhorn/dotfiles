@@ -44,7 +44,7 @@ state="Waiting"
 
 # Colors and formatting
 bold=$(tput bold)
-reset=""                # $(tput sgr0)
+reset=$(tput sgr0)
 black=$(tput setaf 0)   # 000
 red=$(tput setaf 1)     # 001
 green=$(tput setaf 2)   # 010
