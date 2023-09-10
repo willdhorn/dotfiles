@@ -53,13 +53,9 @@ cyan=$(tput setaf 6)
 # Function to run the provided command with indentation in the background
 run_command_background() {
     local command="$1"
-    echo "pre eval"
     eval "$command" &
-    echo "post eval"
     command_pid=$!
-    echo "pre wait"
     wait "$command_pid" # Wait for the command to finish
-    echo "post wait" 
 }
 
 # Function to kill the running command
@@ -110,6 +106,7 @@ check_for_changes() {
             last_triggered_event=$last_event
             last_triggered_event_count=$total_event_count # Update the last triggered event count
             state="Running"
+            print_status_message
             run_command_background "$1"
             state="Waiting"
         else 
