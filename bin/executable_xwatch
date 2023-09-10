@@ -1,4 +1,5 @@
 #!/bin/zsh
+# set -eux
 
 # Default debounce interval in seconds
 default_debounce_interval=2
@@ -24,113 +25,164 @@ last_event=0
 last_triggered_event=0
 
 # Initialize the event count of the last triggered event to 0
+total_event_count=0
 last_triggered_event_count=0
 
 # Initialize the command process ID (PID)
 command_pid=""
 
-# File to store the last event time in the system's temporary directory
+# Create temp files in the system directory so background processes can write to them
+# and the foreground process can read from them (background loops are executed in different environments)
 last_event_file="$(mktemp -t last_event)"
-
-# File to store the total event count in the system's temporary directory
 total_event_count_file="$(mktemp -t total_event_count)"
+command_exit_status_file="$(mktemp -t command_exit_status)"
 
-# Initialize the indentation level
-indentation_level=$default_indentation_level
+indentation_level=2
 
-# Initialize the state variable
+# Initialize state
 state="Waiting"
 
 # Colors and formatting
 bold=$(tput bold)
-reset=$(tput sgr0)
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-blue=$(tput setaf 4)
-yellow=$(tput setaf 3)
-cyan=$(tput setaf 6)
+reset=""                # $(tput sgr0)
+black=$(tput setaf 0)   # 000
+red=$(tput setaf 1)     # 001
+green=$(tput setaf 2)   # 010
+blue=$(tput setaf 4)    # 100
+yellow=$(tput setaf 3)  # 011
+cyan=$(tput setaf 6)    # 110
+magenta=$(tput setaf 5) # 101
+white=$(tput setaf 7)   # 111
+
+blackbg=$(tput setab 0) # 000
+redbg=$(tput setab 1)   # 001
+greenbg=$(tput setab 2) # 010
+bluebg=$(tput setab 4)  # 100
+
+yellowbg=$(tput setab 3)  # 011
+cyanbg=$(tput setab 6)    # 110
+magentabg=$(tput setab 5) # 101
+whitebg=$(tput setab 7)   # 111
 
 # Function to run the provided command with indentation in the background
 run_command_background() {
-    local command="$1"
-    eval "$command" &
-    command_pid=$!
-    wait "$command_pid" # Wait for the command to finish
+  local command="$1"
+  # Run the command in the background, capture its output and exit status
+  {
+    eval "$command"
+    echo "$?" >"$command_exit_status_file"
+  } &
+  command_pid=$!
+}
+
+# Function to reset variables that are used for tracking command status
+reset_command_status() {
+  set_state "$1"
+  command_pid=""
+  rm "$command_exit_status_file"
+  touch "$command_exit_status_file"
+}
+
+# Function to check the command exit status
+check_command_exit_status() {
+  if [[ (-f "$command_exit_status_file") && ("$state" == "Running") ]]; then
+    local cmd_status=$(cat "$command_exit_status_file")
+    if [ -z "$cmd_status" ]; then
+      echo -n "running"
+      set_state "Running"
+    elif [ "$cmd_status" -eq 0 ]; then
+      reset_command_status "Waiting"
+    else
+      reset_command_status "Error"
+    fi
+  fi
 }
 
 # Function to kill the running command
 kill_running_command() {
-    if [ -n "$command_pid" ]; then
-        echo "Killing the running command (PID: $command_pid)..."
-        kill "$command_pid" > /dev/null 2>&1
-    fi
+  if [ -n "$command_pid" ]; then
+    echo -n "Killing the running command (PID: $command_pid)..."
+    kill "$command_pid" >/dev/null 2>&1
+    reset_command_status "Waiting"
+  fi
 }
 
 # Function to print the status message
 print_status_message() {
-    case "$state" in
-        "Waiting")
-            status_message="${bold}${blue}Waiting${reset}"
-            ;;
-        "Running")
-            status_message="${bold}${green}Running command:${reset} ${command_to_run}\n"
-            ;;
-        "Pending")
-            status_message="${bold}${red}Pending${reset}"
-            event_diff=$((total_event_count - last_triggered_event_count))
-            for _ in $(seq $event_diff); do
-                status_message="${status_message}${bold}.${reset}"
-            done
-            ;;
-    esac
-    echo -n "\033[2K\r$status_message"
+  case "$state" in
+  "Running")
+    status_message="${bold}${green}Running command:${reset} ${command_to_run}"
+    ;;
+  "Waiting")
+    status_message="${bold}${blue}Waiting${reset}"
+    ;;
+  "Error")
+    status_message="${bold}${white}${redbg}Error${reset}"
+    ;;
+  "Pending")
+    status_message="${bold}${white}${bluebg}Pending"
+    event_diff=$((total_event_count - last_triggered_event_count))
+    for _ in $(seq $event_diff); do
+      status_message="${status_message}."
+    done
+    status_message="${status_message}${reset}"
+    ;;
+  "Event")
+    status_message="${bold}${blue}${magentabg}EEEEEEVVVVVVEEEEEENNNNNNNTTTTTTTT${reset}"
+    ;;
+  esac
+  echo -n "\r\033[2K$status_message"
+}
+
+set_state() {
+  state="$1"
+  print_status_message
 }
 
 # Function to check for changes and debounce
 check_for_changes() {
-    current_time=$(date +%s)
-    last_event=$(cat "$last_event_file" 2>/dev/null || echo 0)
+  current_time=$(date +%s)
+  last_event=$(cat "$last_event_file" 2>/dev/null || echo 0)
 
-    # Check if a new event has occurred
-    if [ $last_event -gt $last_triggered_event ]; then
-        if [ "$state" = "Running" ]; then
-            # If the command is running, kill it
-            kill_running_command
-        fi
-        state="Pending"
-        
-        # Check if the debounce interval has passed
-        time_since_last_event=$((current_time - last_event))
-        if [ $time_since_last_event -ge $debounce_interval ]; then
-            total_event_count=$(cat "$total_event_count_file" 2>/dev/null || echo 0)
-            last_triggered_event=$last_event
-            last_triggered_event_count=$total_event_count # Update the last triggered event count
-            state="Running"
-            print_status_message
-            run_command_background "$1"
-            state="Waiting"
-        else 
-            # Small delay to stop from spinning and reading files over and over 
-            sleep 0.25
-        fi
-    else
-        sleep $sleep_interval
+  # Check if a new event has occurred
+  if [ $last_event -gt $last_triggered_event ]; then
+    if [ "$state" = "Running" ]; then
+      kill_running_command
     fi
+    set_state "Pending"
+
+    # Check if the debounce interval has passed
+    time_since_last_event=$((current_time - last_event))
+    if [ $time_since_last_event -ge $debounce_interval ]; then
+      total_event_count=$(cat "$total_event_count_file" 2>/dev/null || echo 0)
+      last_triggered_event=$last_event
+      last_triggered_event_count=$total_event_count # Update the last triggered event count
+      set_state "Running"
+      run_command_background "$1"
+    else
+      # Small delay to stop from spinning and reading files over and over
+      sleep 0.25
+    fi
+  else
+    sleep $sleep_interval
+  fi
 }
 
 # Function to cleanup and terminate the fswatch process
 cleanup() {
-    if [ -n "$fswatch_pid" ]; then
-        echo "Terminating fswatch process (PID: $fswatch_pid)..."
-        kill "$fswatch_pid"
-    fi
-    if [ -n "$command_pid" ]; then
-        echo "Terminating command process (PID: $command_pid)..."
-        kill "$command_pid"
-    fi
-    # Clean up the last event and total event count files
-    rm -f "$last_event_file" "$total_event_count_file"
-    exit 0
+  if [ -n "$fswatch_pid" ]; then
+    echo "Terminating fswatch process (PID: $fswatch_pid)..."
+    kill "$fswatch_pid"
+  fi
+  if [ -n "$command_pid" ]; then
+    echo "Terminating command process (PID: $command_pid)..."
+    kill "$command_pid"
+  fi
+  # Clean up the last event and total event count files
+  rm -f "$last_event_file" "$total_event_count_file"
+  # Remove the command exit status file if it exists
+  rm -f "$command_exit_status_file"
+  exit 0
 }
 
 # Trap the INT signal (CTRL+C) and cleanup gracefully
@@ -138,60 +190,64 @@ trap cleanup INT
 
 # Parse command line options
 while getopts "d:c:i:s:ni:" opt; do
-    case $opt in
-        d)
-            directories_to_watch+=("$OPTARG")
-            ;;
-        c)
-            command_to_run="$OPTARG"
-            ;;
-        i)
-            debounce_interval="$OPTARG"
-            ;;
-        s)
-            sleep_interval="$OPTARG"
-            ;;
-        n)
-            run_command_on_startup=true
-            ;;
-        \?)
-            echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n]"
-            exit 1
-            ;;
-    esac
+  case $opt in
+  d)
+    directories_to_watch+=("$OPTARG")
+    ;;
+  c)
+    command_to_run="$OPTARG"
+    ;;
+  i)
+    debounce_interval="$OPTARG"
+    ;;
+  s)
+    sleep_interval="$OPTARG"
+    ;;
+  n)
+    run_command_on_startup=true
+    ;;
+  \?)
+    echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n]"
+    exit 1
+    ;;
+  esac
 done
 
 # Check if directories and command are provided
 if [ ${#directories_to_watch[@]} -eq 0 ] || [ -z "$command_to_run" ]; then
-    echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n] [-i <indentation_level>]"
-    exit 1
+  echo "Usage: $0 -d <directory> -c <command> -i <debounce_interval> -s <sleep_interval> [-n] [-i <indentation_level>]"
+  exit 1
 fi
 
-echo "0" > "$last_event_file"
-echo "0" > "$total_event_count_file"
+echo "0" >"$last_event_file"
+echo "0" >"$total_event_count_file"
 
 if [ "$run_command_on_startup" = true ]; then
-    state="Running"
-    run_command_background "$command_to_run"
-    state="Waiting"
+  set_state "Running"
+  run_command_background "$command_to_run"
 fi
 
-print_status_message
+set_state "Waiting"
 
 # Start fswatch to monitor all specified directories
 fswatch -o "${directories_to_watch[@]}" |
-while read; do
+  while read; do
     # Update the last event time in the file
-    echo "$(date +%s)" > "$last_event_file"
-    total_event_count=$((total_event_count + 1)) # Increment total event count
-    echo "$total_event_count" > "$total_event_count_file" # Update total event count
-    state="Pending"
-done &
-fswatch_pid=$$
+    echo "$(date +%s)" >"$last_event_file"
+    if [ -n "$total_event_count" ]; then
+      total_event_count=$((total_event_count + 1))
+    else
+      total_event_count=1
+    fi
+    echo "$total_event_count" >"$total_event_count_file" # Update total event count
+    set_state "Event"
+  done &
+fswatch_pid=$!
 
 # Continuously check for changes in the foreground and run the specified command
 while true; do
-    print_status_message
-    check_for_changes "$command_to_run"
+  check_for_changes "$command_to_run"
+  if [ "$state" = "Running" ]; then
+    check_command_exit_status
+  fi
 done
-
