@@ -53,9 +53,13 @@ cyan=$(tput setaf 6)
 # Function to run the provided command with indentation in the background
 run_command_background() {
     local command="$1"
+    echo "pre eval"
     eval "$command" &
+    echo "post eval"
     command_pid=$!
+    echo "pre wait"
     wait "$command_pid" # Wait for the command to finish
+    echo "post wait" 
 }
 
 # Function to kill the running command
