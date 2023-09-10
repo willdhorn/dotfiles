@@ -114,21 +114,24 @@ print_status_message() {
     status_message="${bold}${green}Running command:${reset} ${command_to_run}"
     ;;
   "Waiting")
-    status_message="${bold}${blue}Waiting"
+    status_message="${bold}${blue}Waiting${reset}"
     ;;
   "Error")
-    status_message="${bold}${white}${redbg}Error"
+    status_message="${bold}${white}${redbg}Error${reset}"
     ;;
   "Pending")
     status_message="${bold}${white}${bluebg}Pending"
     event_diff=$((total_event_count - last_triggered_event_count))
-    for _ in $(seq ${event_diff}); do
+    for _ in $(seq $event_diff); do
       status_message="${status_message}."
     done
-    status_message="${status_message}"
+    status_message="${status_message}${reset}"
+    ;;
+  "Event")
+    status_message="${bold}${blue}${magentabg}EEEEEEVVVVVVEEEEEENNNNNNNTTTTTTTT${reset}"
     ;;
   esac
-  echo -n "\r\033[2K${status_message}${reset}"
+  echo -n "\r\033[2K$status_message${reset}"
 }
 
 set_state() {
@@ -237,6 +240,7 @@ fswatch -o "${directories_to_watch[@]}" |
       total_event_count=1
     fi
     echo "$total_event_count" >"$total_event_count_file" # Update total event count
+    set_state "Event"
   done &
 fswatch_pid=$!
 
@@ -247,4 +251,3 @@ while true; do
     check_command_exit_status
   fi
 done
-
