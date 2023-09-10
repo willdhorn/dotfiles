@@ -26,6 +26,9 @@ last_triggered_event=0
 # Initialize the event count of the last triggered event to 0
 last_triggered_event_count=0
 
+# Initialize the command process ID (PID)
+command_pid=""
+
 # File to store the last event time in the system's temporary directory
 last_event_file="$(mktemp -t last_event)"
 
@@ -47,18 +50,24 @@ blue=$(tput setaf 4)
 yellow=$(tput setaf 3)
 cyan=$(tput setaf 6)
 
-# Function to run the provided command with indentation
-run_command() {
+# Function to run the provided command with indentation in the background
+run_command_background() {
     local command="$1"
-    print_status_message
-    eval "$command" | sed "s/^/${green}│${reset}$(printf ' %.0s' $(seq 1 $indentation_level))/" # Indent the command's output
+    eval "$command" &
+    command_pid=$!
+    wait "$command_pid" # Wait for the command to finish
+}
+
+# Function to kill the running command
+kill_running_command() {
+    if [ -n "$command_pid" ]; then
+        echo "Killing the running command (PID: $command_pid)..."
+        kill "$command_pid" > /dev/null 2>&1
+    fi
 }
 
 # Function to print the status message
 print_status_message() {
-    if [ $last_event -gt $last_triggered_event ]; then
-        state="Pending"
-    fi
     case "$state" in
         "Waiting")
             status_message="${bold}${blue}Waiting${reset}"
@@ -84,16 +93,23 @@ check_for_changes() {
 
     # Check if a new event has occurred
     if [ $last_event -gt $last_triggered_event ]; then
+        if [ "$state" = "Running" ]; then
+            # If the command is running, kill it
+            kill_running_command
+        fi
+        state="Pending"
+        
         # Check if the debounce interval has passed
         time_since_last_event=$((current_time - last_event))
         if [ $time_since_last_event -ge $debounce_interval ]; then
-            state="Running"
             total_event_count=$(cat "$total_event_count_file" 2>/dev/null || echo 0)
             last_triggered_event=$last_event
             last_triggered_event_count=$total_event_count # Update the last triggered event count
-            run_command "$1"
+            state="Running"
+            run_command_background "$1"
             state="Waiting"
         else 
+            # Small delay to stop from spinning and reading files over and over 
             sleep 0.25
         fi
     else
@@ -106,6 +122,10 @@ cleanup() {
     if [ -n "$fswatch_pid" ]; then
         echo "Terminating fswatch process (PID: $fswatch_pid)..."
         kill "$fswatch_pid"
+    fi
+    if [ -n "$command_pid" ]; then
+        echo "Terminating command process (PID: $command_pid)..."
+        kill "$command_pid"
     fi
     # Clean up the last event and total event count files
     rm -f "$last_event_file" "$total_event_count_file"
@@ -146,17 +166,12 @@ if [ ${#directories_to_watch[@]} -eq 0 ] || [ -z "$command_to_run" ]; then
     exit 1
 fi
 
-# Initial message
-#echo "Watching directories: ${directories_to_watch[*]} and running command: $command_to_run"
-#echo "Debounce interval: $debounce_interval seconds"
-#echo "Sleep interval: $sleep_interval seconds"
-
 echo "0" > "$last_event_file"
 echo "0" > "$total_event_count_file"
 
 if [ "$run_command_on_startup" = true ]; then
     state="Running"
-    run_command "$command_to_run"
+    run_command_background "$command_to_run"
     state="Waiting"
 fi
 
