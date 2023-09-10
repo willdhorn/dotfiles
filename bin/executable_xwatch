@@ -87,10 +87,12 @@ reset_command_status() {
 check_command_exit_status() {
   if [[ (-f "$command_exit_status_file") && ("$state" == "Running") ]]; then
     local cmd_status=$(cat "$command_exit_status_file")
-    if [ "$cmd_status" -eq 0 ]; then
-      reset_command_status "Waiting"
-    else
-      reset_command_status "Error"
+    if [ -n "$cmd_status" ]; then
+      if [ "$cmd_status" -eq 0 ]; then
+        reset_command_status "Waiting"
+      else
+        reset_command_status "Error"
+      fi
     fi
   fi
 }
@@ -108,27 +110,24 @@ kill_running_command() {
 print_status_message() {
   case "$state" in
   "Running")
-    status_message="${bold}${green}Running command:${reset} ${command_to_run}"
+    status_message="${bold}${green}Running command:${reset} ${command_to_run}\n"
     ;;
   "Waiting")
-    status_message="${bold}${blue}Waiting${reset}"
+    status_message="${bold}${blue}Waiting"
     ;;
   "Error")
-    status_message="${bold}${white}${redbg}Error${reset}"
+    status_message="${bold}${white}${redbg}Error"
     ;;
   "Pending")
     status_message="${bold}${white}${bluebg}Pending"
     event_diff=$((total_event_count - last_triggered_event_count))
-    for _ in $(seq $event_diff); do
+    for _ in $(seq ${event_diff}); do
       status_message="${status_message}."
     done
-    status_message="${status_message}${reset}"
-    ;;
-  "Event")
-    status_message="${bold}${blue}${magentabg}EEEEEEVVVVVVEEEEEENNNNNNNTTTTTTTT${reset}"
+    status_message="${status_message}"
     ;;
   esac
-  echo -n "\r\033[2K$status_message${reset}"
+  echo -n "\r\033[2K${status_message}${reset}"
 }
 
 set_state() {
@@ -237,7 +236,6 @@ fswatch -o "${directories_to_watch[@]}" |
       total_event_count=1
     fi
     echo "$total_event_count" >"$total_event_count_file" # Update total event count
-    set_state "Event"
   done &
 fswatch_pid=$!
 
@@ -248,3 +246,4 @@ while true; do
     check_command_exit_status
   fi
 done
+
