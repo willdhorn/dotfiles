@@ -87,10 +87,7 @@ reset_command_status() {
 check_command_exit_status() {
   if [[ (-f "$command_exit_status_file") && ("$state" == "Running") ]]; then
     local cmd_status=$(cat "$command_exit_status_file")
-    if [ -z "$cmd_status" ]; then
-      echo -n "running"
-      set_state "Running"
-    elif [ "$cmd_status" -eq 0 ]; then
+    if [ "$cmd_status" -eq 0 ]; then
       reset_command_status "Waiting"
     else
       reset_command_status "Error"
