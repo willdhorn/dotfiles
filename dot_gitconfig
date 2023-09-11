@@ -3,6 +3,7 @@
 	name = will
 	email = 88556285+willdhorn@users.noreply.github.com
 [alias]
+	c = commit
 	can = commit --amend --no-edit
 	ca = commit --amend
 	co = checkout
@@ -20,7 +21,6 @@
 	f = ls-files --deduplicate
 	pf = push -f
 	aa = add -A
-	c = commit
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
