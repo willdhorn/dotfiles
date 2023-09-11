@@ -14,7 +14,7 @@ ala(){
   chez_file=$(chezmoi source-path ~/user-configs/aliases);
   echo "alias $1='$2'" | tee -a "$chez_file";
   chezmoi git commit -- -a -m "adding alias $1";
-  chezmi apply; 
+  chezmoi apply; 
 }
 
 alias aliasadd='ala'
