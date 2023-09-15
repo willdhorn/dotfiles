@@ -157,7 +157,7 @@ check_for_changes() {
       run_command_background "$1"
     else
       # Small delay to stop from spinning and reading files over and over
-      sleep 0.25
+      sleep 1
     fi
   else
     sleep $sleep_interval
