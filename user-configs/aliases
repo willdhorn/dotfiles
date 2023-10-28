@@ -26,5 +26,3 @@ alias air='~/go/bin/air'
 
 alias edb='edgedb'
 alias atlas='cd ~/workspace/Atlas'
-alias =''
-alias u='fc'

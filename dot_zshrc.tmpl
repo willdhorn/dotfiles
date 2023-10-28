@@ -94,6 +94,9 @@ $ () {
     "$@"
 }
 
+# make accitentally typing ' u' run the last command (happens due to binding QMK nav layer to space and 'up' to NAV('u')
+u () { fc -s }
+
 
 
 {{ if eq .chezmoi.os "darwin" }}
