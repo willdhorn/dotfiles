@@ -5,6 +5,7 @@
 [alias]
 	c = commit
 	can = commit --amend --no-edit
+	acan = "!git add -A && git commit --amend --no-edit"
 	ca = commit --amend
 	co = checkout
 	br = branch
@@ -16,11 +17,14 @@
 	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
 	# rename [branch] to done-[branch]
 	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
-	ala = "!f() { x="$1"; shift; git config --global --replace-all alias.$x \"$*\"; }; f"
+	# ala = "!f() { x="$1"; shift; git config --global --replace-all alias.$x \"$*\"; }; f"
 	cp = cherry-pick
 	f = ls-files --deduplicate
 	pf = push -f
 	aa = add -A
+[push]
+	# automatically sets upstream for new branches
+	default = simple
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
@@ -38,4 +42,4 @@
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
 [core]
-	excludesFile = ~/user-configs/gitignore
+	excludesFile = ~/dotfiles/git/gitignore
