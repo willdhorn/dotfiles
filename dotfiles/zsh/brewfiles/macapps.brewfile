@@ -1,0 +1,19 @@
+tap "homebrew/cask-fonts"
+
+cask "firefox"
+tap "homebrew/cask-versions"
+cask "firefox-developer-edition"
+
+cask "visual-studio-code"
+cask "iterm2"
+
+
+cask "iina"
+cask "alfred"
+cask "rectangle-pro"
+
+cask "obsidian"
+
+# Misc packages
+cask "qmk-toolbox"
+cask "syntax-highlight", no_quarantine: true # get syntax highlighting in Quick Look

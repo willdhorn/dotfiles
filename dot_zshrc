@@ -1,0 +1,47 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# setup p10k settings
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Update PATH
+export PATH=$HOME/bin:$PATH
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin
+if has-cmd "go"; then
+  export PATH=$PATH:$(go env GOPATH)/bin
+fi
+
+if [[ -d "/usr/local/homebrew" ]]; then
+  eval "$(/usr/local/homebrew/bin/brew shellenv)"
+elif [[ -d "/opt/homebrew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+source $ZSHDIR/init_machine-mac.zsh
+source $ZSHDIR/init_machine.zsh
+source $ZSHDIR/init_shell.zsh
+source $ZSHDIR/plugins.zsh
+
+mkdir -p $FLAGSDIR
+if no-has-flag $FLAG_MACHINE_SETUP ; then
+  echo "to initialize: open a new terminal and run:\n\n 'wdh-init'"
+  echo
+  echo "to skip: open a new terminal and run:\n\n 'wdh-skip-init'"
+fi
+
+shellinit_zgenom
+shellinit_miscellanea
+
+# source aliases after setup to make sure aliased commands have been installed
+source $ZSHDIR/aliases.zsh
+source $ZSHDIR/functions.zsh
+
+# Set up iTerm2 shell integration
+if [[ $TERM_PROGRAM == "iTerm.app" ]] && [[ -f "${ITERMDIR}/.iterm2_shell_integration.zsh" ]] && ( has-flag ${FLAG_BREW_MACAPPS} ); then
+    source "${ITERMDIR}/.iterm2_shell_integration.zsh"
+fi

@@ -1,0 +1,11 @@
+# Build tools and runtimes
+brew "go"
+brew "make"
+brew "gcc"
+brew "node"
+brew "pyenv"
+
+# Dev tools
+brew "doctl"
+# NOTE: CLI bins will not be added to path until Docker Desktop is launched the first time
+cask "docker" # docker desktop

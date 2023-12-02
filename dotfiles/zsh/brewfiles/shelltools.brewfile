@@ -1,0 +1,19 @@
+# Shell packages
+brew "coreutils"
+brew "zsh"
+brew "tmux"
+brew "ripgrep" # grep alternative
+brew "jq"      # json parser and formatter for command line
+brew "thefuck" # correct your previous command by typing fuck
+brew "chezmoi"
+brew "stow"
+brew "fd"
+brew "tldr"
+brew "fzf"
+
+# Tools that generate previews for fzf-zsh-plugin
+brew "bat"
+# brew "exa" deprecated
+brew "chafa"
+brew "exiftool"
+brew "lesspipe"
