@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+
+# zgenom plugin file hash: {{ joinPath .chezmoi.homeDir "dotfiles/zsh/load_zgenom.zsh" | sha256sum }}
+
+echo "Reloading zgenom plugins"
+# Reset zgenom and reload plugins
+source $
+source $HOME/dotfiles/zsh/load_zgenom.zsh
+zgenom reset
+load-zgenom

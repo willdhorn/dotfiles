@@ -3,7 +3,7 @@ DOTFILES="$HOME/dotfiles"
 export ZSHDIR="$DOTFILES/zsh"
 export ITERMDIR="$DOTFILES/iterm"
 export GITDIR="$DOTFILES/git"
-export FLAGSDIR="$HOME/._flags"
+export FLAGSDIR="$HOME/.local/_flags"
 
 source $ZSHDIR/dotfile_util.zsh
 

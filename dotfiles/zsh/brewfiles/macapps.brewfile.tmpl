@@ -17,6 +17,12 @@ cask "notunes" # stops iTunes/Apple Music from launching
 cask "obsidian"
 cask "iina"
 cask "bitwarden"
+cask "cyberduck"
+
+{{ if eq .chezmoi.arch "arm" -}}
+# Apps for Apple Silicon Machines
+cask "steam"
+{{- end }}
 
 # Misc packages
 cask "qmk-toolbox"

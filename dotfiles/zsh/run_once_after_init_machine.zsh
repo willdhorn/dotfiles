@@ -1,8 +1,10 @@
+#!/usr/bin/env zsh
 # Install plugins and tools
 export FLAG_ZGENOM_INSTALLED="zgenom-installed"
 
 # zgenom and plugins
 function _install-zgenom() {
+  if [[ -d "$zenom_dir" ]]; then return 0; fi
   git clone https://github.com/jandamm/zgenom.git "$zgenom_dir"
   wdh-write-flag $FLAG_ZGENOM_INSTALLED
 }
@@ -34,10 +36,6 @@ function wdh-init() {
   if is-mac; then
     wdh-install-clt
     _install-brew
-    # source $HOME/.zshrc # homebre unsources everything for some reason
-    wdh-install-brew-shelltools
-    wdh-install-brew-devtools
-
     _set-login-shell
   fi
 
@@ -47,24 +45,19 @@ function wdh-init() {
   ## Configure ##
 
   load-zgenom
-  no-has-cmd "configure-plugins" "source $ZSHDIR/plugins.zsh"
-  configure-plugins
 
   echo
   echo "Base machine setup complete."
-  echo "If this is a Mac anc you would like to install the apps listed in $ZSHDIR/brewfiles/personal-macapps.brewfile"
-  echo "you should run 'wdh-install-brew-macapps'"
+  echo "Your shell should be ready to go."
   echo
-  echo "To start a new shell, run 'exec zsh'"
+  echo "If not, to start a new shell, run:"
+  echo
+  echo 'exec zsh'
 
   wdh-write-flag $FLAG_MACHINE_SETUP
 
   unset -f wdh-init
 }
 
-function wdh-skip-init() {
-  wdh-write-flag $FLAG_MACHINE_SETUP
-  wdh-write-flag $FLAG_MACHINE_SETUP_SKIPPED
-  echo "Skipping base machine setup. If you would like to initialize later run:\n\n 'wdh-init'"
-  unset -f wdh-skip-init
-}
+
+wdh-init

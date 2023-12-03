@@ -1,6 +1,5 @@
 zgenom_dir="$ZSHDIR/zgenom"
 plugins_dir="$ZSHDIR/plugins"
-iterm_dir="$ZSHDIR/iterm"
 
 # Load plugins and tools
 
@@ -108,16 +107,4 @@ function load-zgenom() {
 
     exec zsh
   fi
-}
-
-function shellinit_zgenom() {
-  has-dir "$zgenom_dir" load-zgenom
-}
-
-# miscellaneous things that i don't know where else to put
-function shellinit_miscellanea() {
-  # bind cmd+backspace to delete line
-  bindkey "^U" backward-kill-line
-  # docker completions
-  source <(docker completion zsh)
 }

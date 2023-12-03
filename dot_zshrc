@@ -33,18 +33,17 @@ fi
 
 
 source $ZSHDIR/init_machine-mac.zsh
-source $ZSHDIR/init_machine.zsh
-source $ZSHDIR/init_shell.zsh
+source $ZSHDIR/load_zgenom.zsh
 
-mkdir -p $FLAGSDIR
-if no-has-flag $FLAG_MACHINE_SETUP ; then
-  echo "to initialize: open a new terminal and run:\n\n 'wdh-init'"
-  echo
-  echo "to skip: open a new terminal and run:\n\n 'wdh-skip-init'"
-fi
+# mkdir -p $FLAGSDIR
+# if no-has-flag $FLAG_MACHINE_SETUP ; then
+#   echo "to initialize: open a new terminal and run:\n\n 'wdh-init'"
+#   echo
+#   echo "to skip: open a new terminal and run:\n\n 'wdh-skip-init'"
+# fi
 
-shellinit_zgenom
-shellinit_miscellanea
+# Load/initialize pluigns if zgenom is installed
+has-dir "$zgenom_dir" load-zgenom
 
 # source aliases after setup to make sure aliased commands have been installed
 source $ZSHDIR/aliases.zsh

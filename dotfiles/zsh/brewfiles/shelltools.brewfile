@@ -15,7 +15,7 @@ brew "bitwarden-cli"
 
 # Tools that generate previews for fzf-zsh-plugin
 brew "bat"
-# brew "exa" deprecated
+brew "exa" # deprecated
 brew "chafa"
 brew "exiftool"
 brew "lesspipe"
