@@ -14,4 +14,4 @@ alias -g bb='boxbox'
 alias chez='chezmoi'
 alias edb='edgedb'
 alias sync-brew='wdh-sync-brew'
-
+alias zgload='zgenom reset && load-zgenom'

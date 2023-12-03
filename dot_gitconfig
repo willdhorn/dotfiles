@@ -21,7 +21,7 @@
 	# resets
 	undo = reset --soft HEAD~
 	unstage = reset --soft HEAD^
-	forget = git reset --hard origin
+	forget = reset --hard origin
 	# Log
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
@@ -42,6 +42,8 @@
 [push]
 	# automatically sets upstream of new branches
 	default = simple
+[pull]
+	rebase = true
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
