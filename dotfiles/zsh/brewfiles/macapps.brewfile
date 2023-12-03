@@ -21,6 +21,7 @@ cask "bitwarden"
 # Misc packages
 cask "qmk-toolbox"
 cask "syntax-highlight", no_quarantine: true # get syntax highlighting in Quick Look
+cask "flux"
 
 # Fonts
 tap "homebrew/cask-fonts"
