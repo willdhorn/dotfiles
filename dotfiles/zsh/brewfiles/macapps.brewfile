@@ -24,9 +24,9 @@ cask "syntax-highlight", no_quarantine: true # get syntax highlighting in Quick 
 
 # Fonts
 tap "homebrew/cask-fonts"
-cask font-cascadia-code
-cask font-cascadia-code-pl
-cask font-meslo-lg-nerd-font
-cask font-go-mono-nerd-font
-cask font-open-dyslexic
-cask font-open-dyslexic-nerd-font # lol why
+cask "font-cascadia-code"
+cask "font-cascadia-code-pl"
+cask "font-meslo-lg-nerd-font"
+cask "font-go-mono-nerd-font"
+cask "font-open-dyslexic"
+cask "font-open-dyslexic-nerd-font" # lol why
