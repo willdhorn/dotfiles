@@ -106,7 +106,7 @@ function wdh-write-flag() {
     return 1
   fi
   mkdir -p $FLAGSDIR
-  touch "'$FLAGSDIR/$name'"
+  touch "'$FLAGSDIR/$name'" &>/dev/null
   echo $(date +%s) >"$FLAGSDIR/$name"
 }
 # reads the timestamp (in unix seconds) of a flag

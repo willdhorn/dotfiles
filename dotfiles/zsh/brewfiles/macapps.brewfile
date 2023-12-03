@@ -1,19 +1,32 @@
-tap "homebrew/cask-fonts"
-
+# Browser
 cask "firefox"
 tap "homebrew/cask-versions"
 cask "firefox-developer-edition"
 
+# Development
 cask "visual-studio-code"
 cask "iterm2"
 
+# Powertools
+cask "alfred" # spotlight replacement
+cask "rectangle-pro" # window management
+cask "stats"  # system stats monitor
+cask "notunes" # stops iTunes/Apple Music from launching
 
-cask "iina"
-cask "alfred"
-cask "rectangle-pro"
-
+# Apps
 cask "obsidian"
+cask "iina"
+cask "bitwarden"
 
 # Misc packages
 cask "qmk-toolbox"
 cask "syntax-highlight", no_quarantine: true # get syntax highlighting in Quick Look
+
+# Fonts
+tap "homebrew/cask-fonts"
+cask font-cascadia-code
+cask font-cascadia-code-pl
+cask font-meslo-lg-nerd-font
+cask font-go-mono-nerd-font
+cask font-open-dyslexic
+cask font-open-dyslexic-nerd-font # lol why

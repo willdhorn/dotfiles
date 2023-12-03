@@ -10,6 +10,8 @@ brew "stow"
 brew "fd"
 brew "tldr"
 brew "fzf"
+brew "gh"
+brew "bitwarden-cli"
 
 # Tools that generate previews for fzf-zsh-plugin
 brew "bat"
