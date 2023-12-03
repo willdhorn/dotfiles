@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 # Original: https://github.com/belak/zsh-utils/blob/main/history/history.plugin.zsh
 
 hist_data_dir="$HOME/.local/share/zsh"

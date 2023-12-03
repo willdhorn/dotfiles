@@ -4,29 +4,43 @@
 	email = 88556285+willdhorn@users.noreply.github.com
 [alias]
 	aa = add -A
+	# Commit
 	c = commit
-	ca = commit --amend
+	ca = commit --amend git
 	can = commit --amend --no-edit
-	ac = "!git add -A && git commit"
-	aca = "!git add -A && git commit --amend"
-	acan = "!git add -A && git commit --amend --no-edit"
-	co = checkout
-	cp = cherry-pick
-	br = branch
+	# Commit with message
+	cm = "!f() { git c -m \"$*\"; }; f"
+	cam = "!f() { git ca -m \"$*\"; }; f"
+	# Add all and Commit
+	ac = "!git aa && git c"
+	aca = "!git aa && git ca"
+	acan = "!git aa && git can"
+	# Add all and Commit with message
+	acm = "!f() { git ac -m \"$*\"; }; f"
+	acam = "!f() { git aca -m \"$*\"; }; f"
+	# resets
 	undo = reset --soft HEAD~
 	unstage = reset --soft HEAD^
+	forget = git reset --hard origin
+	# Log
 	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
 	la = "!git config -l | grep alias | cut -c 7-"
+	# Merging
 	ours = "!f() { git co --ours $@ && git add $@; }; f"
 	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
-	# rename [branch] to done-[branch]
+	# Changes [branch] name to done-[branch]
 	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
-	# ala = "!f() { x="$1"; shift; git config --global --replace-all alias.$x \"$*\"; }; f"
-	f = ls-files --deduplicate
+	# Push
+	p = push
 	pf = push -f
+	# Various
+	co = checkout
+	cp = cherry-pick
+	br = branch
+	f = ls-files --deduplicate
 [push]
-	# automatically sets upstream for new branches
+	# automatically sets upstream of new branches
 	default = simple
 [filter "lfs"]
 	process = git-lfs filter-process

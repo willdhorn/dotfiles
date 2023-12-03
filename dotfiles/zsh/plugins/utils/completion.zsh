@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 export HYPHEN_INSENSITIVE="true" # Disable hyphen-sensitive completion.
 export COMPLETION_WAITING_DOTS="true"
 
@@ -11,4 +13,6 @@ setopt EXTENDED_GLOB    # Needed for file modification glob modifiers with compi
 unsetopt MENU_COMPLETE  # Do not autoselect the first completion entry.
 unsetopt FLOW_CONTROL   # Disable start/stop characters in shell editor.
 
-FPATH="~/.zfunc:${FPATH}"
+export FPATH="~/.zfunc:${FPATH}"
+
+export __wdh_utils_did_work=1

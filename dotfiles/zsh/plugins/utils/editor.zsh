@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 # Original: https://github.com/belak/zsh-utils/blob/main/editor/editor.plugin.zsh
 #
 # Requirements
