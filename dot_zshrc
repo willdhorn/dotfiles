@@ -8,6 +8,9 @@ fi
 # setup p10k settings
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# silence warnings about output during promt initialization
+export POWERLEVEL9K_INSTANT_PROMPT=quiet 
+
 # Update PATH
 export PATH=$HOME/bin:$PATH
 export GOPATH=$HOME/go
@@ -16,16 +19,22 @@ if has-cmd "go"; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
+# brew env vars and path
 if [[ -d "/usr/local/homebrew" ]]; then
   eval "$(/usr/local/homebrew/bin/brew shellenv)"
 elif [[ -d "/opt/homebrew" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# brew completions
+if has-cmd "brew"; then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
+
 source $ZSHDIR/init_machine-mac.zsh
 source $ZSHDIR/init_machine.zsh
 source $ZSHDIR/init_shell.zsh
-source $ZSHDIR/plugins.zsh
 
 mkdir -p $FLAGSDIR
 if no-has-flag $FLAG_MACHINE_SETUP ; then

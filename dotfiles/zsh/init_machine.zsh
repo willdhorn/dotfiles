@@ -6,49 +6,11 @@ function _install-zgenom() {
   git clone https://github.com/jandamm/zgenom.git "$zgenom_dir"
   wdh-write-flag $FLAG_ZGENOM_INSTALLED
 }
-function _install-alias-maker() {
-  git clone https://github.com/MefitHp/alias-maker.git "$plugins_dir/alias-maker"
-}
-# fzf
-function _install-fzf() {
-  if is-mac; then
-    no-has-cmd fzf 'brew install fzf'
-  else
-    no-has-cmd fzf 'apt install fzf'
-  fi
-}
-function _update-fzf() {
-  if is-mac; then
-    brew upgrade fzf
-  else
-    apt upgrade fzf
-  fi
-}
-
-# edgedb
-function _install-edgedb() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh -- -y
-}
 
 # go tools
 function _install-go-tools() {
   go install github.com/cosmtrek/air@latest
 }
-
-# function _check-installed() {
-#   # check brew
-#   if is-mac; then
-#     no-has-cmd "brew" _install-brew 'installing brew'
-#   fi
-#   # check zgenom
-#   no-has-dir "$zgenom_dir" _install-zgenom 'installing zgenom'
-#   # chech fzf
-#   no-has-cmd fzf _install-fzf 'installing fzf'
-#   # check edgedb
-#   no-has-cmd "edgedb" _install-edgedb 'installing edgedb-cli'
-#   # intall go tools
-#   has-cmd "go" "_install-go-tools"
-# }
 
 export FLAG_MACHINE_SETUP="machine-setup"
 export FLAG_MACHINE_SETUP_SKIPPED="machine-setup-skipped"
@@ -77,15 +39,9 @@ function wdh-init() {
     wdh-install-brew-devtools
 
     _set-login-shell
-    _install-fonts
   fi
 
   _install-zgenom
-  _install-alias-maker
-
-  _install-fzf
-
-  _install-edgedb
 
   _install-go-tools
   ## Configure ##

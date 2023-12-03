@@ -54,13 +54,7 @@ function _set-login-shell() {
   echo "Login shell is now $brewzsh"
   wdh-write-flag $FLAG_LOGIN_SHELL
 }
-# unpack fonts and install in ~/Library/Fonts
-function _install-fonts() {
-  mkdir -p ~/Library/Fonts
-  tar xf $HOME/.fonts/CascadiaCode.tgz --directory=$HOME/Library/Fonts
-  tar xf $HOME/.fonts/MesloLGS_NF.tgz --directory=$HOME/Library/Fonts
-  wdh-write-flag $FLAG_FONTS_INSTALLED
-}
+
 function wdh-install-clt() {
   xcode-select --install
   wdh-write-flag $FLAG_CLT_INSTALLED
