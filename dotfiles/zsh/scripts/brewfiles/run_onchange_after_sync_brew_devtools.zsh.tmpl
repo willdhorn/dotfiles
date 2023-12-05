@@ -1,7 +1,8 @@
 {{ if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env zsh
 
-# brewfile hash: {{ joinPath .chezmoi.homeDir "dotfiles/zsh/brewfiles/shelltools.brewfile" | sha256sum }}
+# brewfile hash: {{ joinPath .chezmoi.homeDir "dotfiles/zsh/brewfiles/devtools.brewfile" | sha256sum }}
 echo "Updating installed packages (development tools)"
 brew bundle --file="$ZSHDIR/brewfiles/devtools.brewfile"
+wdh_brewfile-cleanup
 {{- end }}

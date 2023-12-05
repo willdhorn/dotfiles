@@ -21,6 +21,18 @@ if has-cmd "go"; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
+# placate some random zgenom plugin
 function python() {
   /usr/bin/python3 "$@"
+}
+
+# === script utils ===
+
+# uninstall brew formulae and casks not in any of the brewfiles
+function wdh_brewfile-cleanup {
+  echo cleaning old brew packages is disabled because idk how to get it to work...
+  # cat $ZSHDIR/brewfiles/*.brewfile |
+  #   grep -E "^(brew|cask|tap|vscode|whalebrew|mas)" |
+  #   sed 's:#.*::g' |
+  #   brew bundle cleanup --file=-
 }

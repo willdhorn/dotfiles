@@ -1,5 +1,6 @@
 # Shell packages
 brew "coreutils"
+brew "git"
 brew "zsh"
 brew "tmux"
 brew "ripgrep" # grep alternative

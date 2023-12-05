@@ -8,10 +8,10 @@ cask "visual-studio-code"
 cask "iterm2"
 
 # Powertools
-cask "alfred" # spotlight replacement
+cask "alfred"        # spotlight replacement
 cask "rectangle-pro" # window management
-cask "stats"  # system stats monitor
-cask "notunes" # stops iTunes/Apple Music from launching
+cask "stats"         # system stats monitor
+cask "notunes"       # stops iTunes/Apple Music from launching
 
 # Apps
 cask "obsidian"
@@ -19,9 +19,11 @@ cask "iina"
 cask "bitwarden"
 cask "cyberduck"
 
-{{ if eq .chezmoi.arch "arm" -}}
+{{ if eq .chezmoi.arch "arm64" -}}
 # Apps for Apple Silicon Machines
-cask "steam"
+cask "blender"
+{{- else -}}
+# not including apps for apple silicon (arch="{{.chezmoi.arch}}")
 {{- end }}
 
 # Misc packages
