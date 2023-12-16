@@ -11,7 +11,13 @@ function _install-zgenom() {
 
 # go tools
 function _install-go-tools() {
+  if no-has-cmd go; then
+    # fallback if not downloaded from brew
+    curl -LO https://get.golang.org/$(uname)/go_installer && chmod +x go_installer && ./go_installer && rm go_installer
+  fi
+
   go install github.com/cosmtrek/air@latest
+  go install github.com/rinchsan/gosimports/cmd/gosimports@latest
 }
 
 export FLAG_MACHINE_SETUP="machine-setup"
@@ -21,9 +27,11 @@ export FLAG_MACHINE_SETUP_SKIPPED="machine-setup-skipped"
 function wdh-init() {
   cd $HOME # don't know if this is necessary but it doesn't hurt
   # make sure all functions are defined
-  source $ZSHDIR/init_machine-mac.zsh
-  source $ZSHDIR/init_machine.zsh
-  source $ZSHDIR/init_shell.zsh
+  if is-mac; then
+    source $ZSHDIR/init_machine-mac.zsh
+  fi
+  source $ZSHDIR/load_zgenom.zsh
+  # source $ZSHDIR/init_shell.zsh
 
   # get sudo
   # this is required because brew resets the sudo timestamp
@@ -58,6 +66,5 @@ function wdh-init() {
 
   unset -f wdh-init
 }
-
 
 wdh-init
