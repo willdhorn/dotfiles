@@ -27,9 +27,7 @@ export FLAG_MACHINE_SETUP_SKIPPED="machine-setup-skipped"
 function wdh-init() {
   cd $HOME # don't know if this is necessary but it doesn't hurt
   # make sure all functions are defined
-  if is-mac; then
-    source $ZSHDIR/init_machine-mac.zsh
-  fi
+  source $ZSHDIR/init_machine.zsh
   source $ZSHDIR/load_zgenom.zsh
   # source $ZSHDIR/init_shell.zsh
 
@@ -37,20 +35,23 @@ function wdh-init() {
   # this is required because brew resets the sudo timestamp
   # before exiting if it wasn't active prior, and we need sudo privliges to
   # set the login shell after brew installs zsh
-  echo "Setting the login shell to the brew version of zsh requires sudo privileges"
+  # echo "Setting the login shell to the brew version of zsh requires sudo privileges"
   sudo echo "Installing brew"
   ## Install ##
 
+  # install brew and required build tools
   if is-mac; then
     wdh-install-clt
     _install-brew
     _set-login-shell
+  else
+    sudo apt-get install build-essential procps curl file git
+    _install-brew
   fi
 
   _install-zgenom
 
   _install-go-tools
-  ## Configure ##
 
   load-zgenom
 
@@ -64,7 +65,7 @@ function wdh-init() {
 
   wdh-write-flag $FLAG_MACHINE_SETUP
 
-  unset -f wdh-init
+  # unset -f wdh-init
 }
 
 wdh-init

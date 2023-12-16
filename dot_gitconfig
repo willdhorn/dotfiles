@@ -6,7 +6,7 @@
 	aa = add -A
 	# Commit
 	c = commit
-	ca = commit --amend git
+	ca = commit --amend
 	can = commit --amend --no-edit
 	# Commit with message
 	cm = "!f() { git c -m \"$*\"; }; f"
@@ -30,7 +30,8 @@
 	ours = "!f() { git co --ours $@ && git add $@; }; f"
 	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
 	# Changes [branch] name to done-[branch]
-	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
+	done = "!f() { git branch | grep ${1} | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
+	newb = "!f() { git checkout -b ${1} }; f"
 	# Push
 	p = push
 	pf = push -f
@@ -39,11 +40,15 @@
 	cp = cherry-pick
 	br = branch
 	f = ls-files --deduplicate
-[push]
-	# automatically sets upstream of new branches
-	default = simple
 [pull]
 	rebase = true
+[push]
+	# automatically sets upstream of new branches
+	autoSetupRemote = true
+	default = simple
+[rebase]
+	stat = true
+	abbreviateCommands = true
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true

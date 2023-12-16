@@ -19,28 +19,18 @@ if has-cmd "go"; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
 
+
+
+source $ZSHDIR/init_machine.zsh
+source $ZSHDIR/load_zgenom.zsh
+
 # brew env vars and path
-if [[ -d "/usr/local/homebrew" ]]; then
-  eval "$(/usr/local/homebrew/bin/brew shellenv)"
-elif [[ -d "/opt/homebrew" ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+wdh-brew-shellenv
 
 # brew completions
 if has-cmd "brew"; then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
-
-
-source $ZSHDIR/init_machine-mac.zsh
-source $ZSHDIR/load_zgenom.zsh
-
-# mkdir -p $FLAGSDIR
-# if no-has-flag $FLAG_MACHINE_SETUP ; then
-#   echo "to initialize: open a new terminal and run:\n\n 'wdh-init'"
-#   echo
-#   echo "to skip: open a new terminal and run:\n\n 'wdh-skip-init'"
-# fi
 
 # Load/initialize pluigns if zgenom is installed
 has-dir "$zgenom_dir" load-zgenom
@@ -50,6 +40,6 @@ source $ZSHDIR/aliases.zsh
 source $ZSHDIR/functions.zsh
 
 # Set up iTerm2 shell integration
-if [[ $TERM_PROGRAM == "iTerm.app" ]] && [[ -f "${ITERMDIR}/.iterm2_shell_integration.zsh" ]] && ( has-flag ${FLAG_BREW_MACAPPS} ); then
+if [[ $TERM_PROGRAM == "iTerm.app" ]] && [[ -f "${ITERMDIR}/.iterm2_shell_integration.zsh" ]]; then
     source "${ITERMDIR}/.iterm2_shell_integration.zsh"
 fi

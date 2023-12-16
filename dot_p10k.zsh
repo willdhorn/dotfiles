@@ -100,9 +100,10 @@
     todo                    # todo items (https://github.com/todotxt/todo.txt-cli)
     timewarrior             # timewarrior tracking status (https://timewarrior.net/)
     taskwarrior             # taskwarrior task count (https://taskwarrior.org/)
-    time                    # current time
+    date                    # current time (since time is used for persistent time command history) 
     # =========================[ Line #2 ]=========================
     newline
+    time # used for showing time command started in scrollback history
     # ip                    # ip address and bandwidth usage for a specified network interface
     # public_ip             # public IP address
     # proxy                 # system-wide http/https/ftp proxy
@@ -115,7 +116,7 @@
   typeset -g POWERLEVEL9K_MODE=nerdfont-complete
   # When set to `moderate`, some icons will have an extra space after them. This is meant to avoid
   # icon overlap when using non-monospace fonts. When set to `none`, spaces are not added.
-  typeset -g POWERLEVEL9K_ICON_PADDING=none
+  typeset -g POWERLEVEL9K_ICON_PADDING=moderate
 
   # When set to true, icons appear before content on both sides of the prompt. When set
   # to false, icons go after content. If empty or not set, icons go before content in the left
@@ -135,9 +136,9 @@
 
   # Connect left prompt lines with these symbols. You'll probably want to use the same color
   # as POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND below.
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%244F╭─'
-  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%244F├─'
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%244F╰─'
+  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX= #'%244F╭─'
+  typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX= #'%244F├─'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX= #'%244F╰─'
   # Connect right prompt lines with these symbols.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=
   typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=
@@ -184,9 +185,6 @@
   # Custom shell level prompt element (how many shells deep are we right now)
   shell_level_element() {
     awk -v n=$((SHLVL - 1)) -v term="$TERM_PROGRAM" 'BEGIN {
-      if (term == "vscode") {
-        n = n - 3
-      }
       if (n <= 3) {
         for (i = 1; i <= n; i++) {
           if (i == n) {
@@ -202,6 +200,7 @@
   }
   typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL="shell_level_element"
   typeset -g POWERLEVEL9K_CUSTOM_SHELL_LEVEL_BACKGROUND=83
+
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
@@ -1621,15 +1620,22 @@
   #   P9K_WIFI_BARS         | signal strength in bars, from 0 to 4 (derived from P9K_WIFI_RSSI and P9K_WIFI_NOISE)
 
   ####################################[ time: current time ]####################################
+  ##### time (for persistent command execution time) #####
   # Current time color.
-  # typeset -g POWERLEVEL9K_TIME_FOREGROUND=0
-  # typeset -g POWERLEVEL9K_TIME_BACKGROUND=7
+  typeset -g POWERLEVEL9K_TIME_FOREGROUND=88
+  typeset -g POWERLEVEL9K_TIME_BACKGROUND='#263238'
   # Format for the current time: 09:51:02. See `man 3 strftime`.
-  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}'
+  typeset -g POWERLEVEL9K_TIME_FORMAT='%D{%H:%M:%S}  '
+  typeset -g POWERLEVEL9K_TIME_ICON=
+  ##### date (actually man prompt time) #####
+  typeset -g POWERLEVEL9K_DATE_FOREGROUND=0
+  typeset -g POWERLEVEL9K_DATE_BACKGROUND=7
+  typeset -g POWERLEVEL9K_DATE_FORMAT='%D{%H:%M:%S}'
+  typeset -g POWERLEVEL9K_DATE_ICON=$'\uF017'
   # If set to true, time will update when you hit enter. This way prompts for the past
   # commands will contain the start times of their commands as opposed to the default
   # behavior where they contain the end times of their preceding commands.
-  typeset -g POWERLEVEL9K_TIME_UPDATE_ON_COMMAND=false
+  typeset -g POWERLEVEL9K_TIME_UPDATE_ON_COMMAND=true
   # Custom icon.
   # typeset -g POWERLEVEL9K_TIME_VISUAL_IDENTIFIER_EXPANSION='⭐'
   # Custom prefix.
@@ -1675,7 +1681,12 @@
   #   - always:   Trim down prompt when accepting a command line.
   #   - same-dir: Trim down prompt when accepting a command line unless this is the first command
   #               typed after changing current working directory.
-  typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=always
+  typeset -g POWERLEVEL9K_TRANSIENT_PROMPT=off
+
+  # Functions that enable transient prompt like behavior while still showing the time a command started in
+  # the history.
+  p10k-on-post-prompt() { p10k display '1'=hide '2/right/time'=show }
+  p10k-on-pre-prompt()  { p10k display '1'=show '2/right/time'=hide }
 
   # Instant prompt mode.
   #

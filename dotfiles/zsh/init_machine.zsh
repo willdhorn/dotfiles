@@ -13,7 +13,7 @@ export FLAG_FONTS_INSTALLED="fonts-installed"
 # install brew and package install helpers
 function _install-brew() {
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/opt/homebrew/bin/brew shellenv)"
+  wdh-brew-shellenv
   wdh-write-flag $FLAG_BREW_INSTALLED
 }
 function wdh-install-brew-shelltools() {
@@ -34,7 +34,18 @@ function wdh-install-brew-macapps() {
 function wdh-sync-brew() {
   wdh-install-brew-shelltools
   wdh-install-brew-devtools
-  has-flag $FLAG_BREW_MACAPPS wdh-install-brew-macapps
+  if is-mac; then
+    has-flag $FLAG_BREW_MACAPPS wdh-install-brew-macapps
+  fi
+}
+function wdh-brew-shellenv() {
+  if [[ -d "/usr/local/homebrew" ]]; then # intel mac
+    eval "$(/usr/local/homebrew/bin/brew shellenv)"
+  elif [[ -d "/opt/homebrew" ]]; then # arm mac
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -d "/home/linuxbrew/.linuxbrew" ]]; then # linux
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
 }
 
 # set the login shell to the brew version of zsh

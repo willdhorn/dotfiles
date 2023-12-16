@@ -43,18 +43,9 @@ function load-zgenom() {
 
     # fzf
     local pkgmgr
-    if is-mac; then
-      pkgmgr="brew"
-    else
-      pkgmgr="apt"
-    fi
     zgenom eval --name fzf '
       if ! command -v fzf &> /dev/null; then
-        if command -v '$pkgmgr' &> /dev/null; then
-          $pkgmgr install fzf
-        else
-          echo "fzf not installed, '$pkgmgr' not found"
-        fi
+        brew install fzf
       fi
     '
     zgenom load unixorn/fzf-zsh-plugin
