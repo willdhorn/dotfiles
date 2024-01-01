@@ -51,7 +51,7 @@ source $ZSHDIR/functions.zsh
 
 # idk why but the util plugin doesn't seem to be setting history options correctly
 # so I'm sourcing the file directly
-source $ZSHDIR/dotfiles/zsh/plugins/utils/opts/history.zsh
+source $ZSHDIR/plugins/utils/opts/history.zsh
 
 # Set up iTerm2 shell integration
 if [[ $TERM_PROGRAM == "iTerm.app" ]] && [[ -f "${ITERMDIR}/.iterm2_shell_integration.zsh" ]] && ( has-flag ${FLAG_BREW_MACAPPS} ); then

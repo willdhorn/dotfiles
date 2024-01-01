@@ -59,3 +59,7 @@ function wdh-install-clt() {
   xcode-select --install
   wdh-write-flag $FLAG_CLT_INSTALLED
 }
+
+function wdh-install-colemakdh() {
+  sudo cp "~/dotfiles/misc/colemakdh/Colemak DH.bundle" "/Library/Keyboard Layouts/"
+}

@@ -45,6 +45,7 @@ function wdh-init() {
     wdh-install-clt
     _install-brew
     _set-login-shell
+    wdh-install-colemakdh
   fi
 
   _install-zgenom
