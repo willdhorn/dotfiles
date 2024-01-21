@@ -61,5 +61,5 @@ function wdh-install-clt() {
 }
 
 function wdh-install-colemakdh() {
-  sudo cp "~/dotfiles/misc/colemakdh/Colemak DH.bundle" "/Library/Keyboard Layouts/"
+  sudo cp "$DOTFILES/misc/colemakdh/Colemak\ DH.bundle" "/Library/Keyboard Layouts/"
 }

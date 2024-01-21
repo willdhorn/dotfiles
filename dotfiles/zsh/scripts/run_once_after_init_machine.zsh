@@ -4,6 +4,7 @@ export FLAG_ZGENOM_INSTALLED="zgenom-installed"
 
 # zgenom and plugins
 function _install-zgenom() {
+  if has-flag $FLAG_ZGENOM_INSTALLED; then return 0; fi
   if [[ -d "$zenom_dir" ]]; then return 0; fi
   git clone https://github.com/jandamm/zgenom.git "$zgenom_dir"
   wdh-write-flag $FLAG_ZGENOM_INSTALLED

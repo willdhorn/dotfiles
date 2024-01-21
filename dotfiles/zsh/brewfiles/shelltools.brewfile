@@ -13,6 +13,7 @@ brew "tldr"
 brew "fzf"
 brew "gh"
 brew "bitwarden-cli"
+brew "fswatch"
 
 # Tools that generate previews for fzf-zsh-plugin
 brew "bat"
