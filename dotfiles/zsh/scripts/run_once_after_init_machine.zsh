@@ -20,6 +20,21 @@ function _install-go-tools() {
   go install github.com/rinchsan/gosimports/cmd/gosimports@latest
 }
 
+# fix annoying bonk for 'invalid' shortcuts macOS bug
+function _fix-bonk() {
+  if is-mac; then
+    local key_bindings_dir="$HOME/Library/KeyBindings"
+    local key_bindings_file="$key_bindings_dir/DefaultKeyBinding.dict"
+    local content='{
+    "@^\UF701" = "noop:";
+    "@^\UF702" = "noop:";
+    "@^\UF703" = "noop:";
+}'
+    mkdir -p "$key_bindings_dir"
+    echo "$content" >"$key_bindings_file"
+  fi
+}
+
 export FLAG_MACHINE_SETUP="machine-setup"
 export FLAG_MACHINE_SETUP_SKIPPED="machine-setup-skipped"
 
@@ -46,6 +61,7 @@ function wdh-init() {
     _install-brew
     _set-login-shell
     wdh-install-colemakdh
+    _fix-bonk
   fi
 
   _install-zgenom
