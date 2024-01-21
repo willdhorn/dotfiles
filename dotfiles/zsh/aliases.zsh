@@ -15,3 +15,7 @@ alias chez='chezmoi'
 alias edb='edgedb'
 alias sync-brew='wdh-sync-brew'
 alias zgload='zgenom reset && load-zgenom'
+
+alias ll='ls -lh'
+alias lht='ls -lht'
+alias la='ls -A'
