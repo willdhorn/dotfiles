@@ -67,6 +67,8 @@
 			<integer>1</integer>
 		</dict>
 	</array>
+	<key>AdjustWindowForFontSizeChange</key>
+	<false/>
 	<key>AggressiveFocusFollowsMouse</key>
 	<false/>
 	<key>AllowClipboardAccess</key>
