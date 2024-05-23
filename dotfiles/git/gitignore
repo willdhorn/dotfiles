@@ -8,9 +8,10 @@
 .pyc
 #file created by pyenv 
 .python-version
-
+node_modules
 
 
 # Build artifacts
 build/
+dist/
 

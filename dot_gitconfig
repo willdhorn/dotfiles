@@ -84,6 +84,7 @@
 
 [push]
 	# automatically sets upstream of new branches
+	autoSetupRemote = true
 	default = simple
 [pull]
 	rebase = true
