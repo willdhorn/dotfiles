@@ -454,7 +454,7 @@
     # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
     (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}${VCS_STATUS_PUSH_COMMITS_AHEAD}${__wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON}"
     # *42 if have stashes.
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}${VCS_STATUS_STASHES}${__wdh__POWERLEVEL9K_VCS_STASHES_ICON}"
+    # (( VCS_STATUS_STASHES        )) && res+=" ${clean}${VCS_STATUS_STASHES}${__wdh__POWERLEVEL9K_VCS_STASHES_ICON}"
     # 'merge' if the repo is in an unusual state.
     [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
     # ~42 if have merge conflicts.
