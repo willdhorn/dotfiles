@@ -2,7 +2,13 @@
 [user]
 	name = will
 	email = 88556285+willdhorn@users.noreply.github.com
-	
+[core]
+	excludesFile = ~/dotfiles/git/gitignore
+
+# always use ssh instead of http
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+
 [pretty]
 	# credit: this guy: https://github.com/alfunx/.dotfiles/blob/2d22e8de8a63432909c005991698b41ab39b6f7f/.gitconfig#L227-L235
 	# o = one line
@@ -19,14 +25,20 @@
 [alias]
 	aa = add -A
 
-	# commit
+	# Commit
+	# BeforeFlags
+	#  	* a - Add (git add -A) 
+	# After Flags
+	# 	* a - Ammend
+	# 		* n - No-Edit; can't be used with `m`
+	# 	* m - Message
+	#		* f - Force (--no-verify)
 	c    = commit
 	cf   = commit --no-verify
 	ca   = commit --amend
 	caf  = commit --amend --no-verify
 	can  = commit --amend --no-edit
 	canf = commit --amend --no-edit --no-verify
-	#
 	# Add all and Commit
 	ac    = "!git aa && git c"
 	acf   = "!git aa && git cf"
@@ -34,12 +46,10 @@
 	acaf  = "!git aa && git caf"
 	acan  = "!git aa && git can"
 	acanf = "!git aa && git canf"
-	#
 	# Commit with message
 	cm   = "!f() { git c -m \"$*\"; }; f"
 	cam  = "!f() { git ca -m \"$*\"; }; f"
 	camf = "!f() { git caf -m \"$*\"; }; f"
-	#
 	# Add all and Commit with message
 	acm   = "!f() { git ac -m \"$*\"; }; f"
 	acmf  = "!f() { git acf -m \"$*\"; }; f"
@@ -73,8 +83,11 @@
 	p = push
 	pf = push -f
 	
-	# Various
+	# Checkout
 	co = checkout
+	cob = chechout -b
+
+	# Various
 	cp = cherry-pick
 	br = branch
 	f = ls-files --deduplicate
@@ -95,6 +108,7 @@
 	smudge = git-lfs smudge -- %f
 [init]
 	defaultBranch = main
+
 [merge]
 	tool = vscode
 [mergetool "vscode"]
@@ -104,5 +118,3 @@
 	algorithm = histogram
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
-[core]
-	excludesFile = ~/dotfiles/git/gitignore
