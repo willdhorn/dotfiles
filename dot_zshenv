@@ -6,12 +6,21 @@ export GITDIR="$DOTFILES/git"
 export FLAGSDIR="$HOME/.local/_flags"
 
 source $ZSHDIR/dotfile_util.zsh
+source $GITDIR/semver_tag_functions.zsh
 
 if [[ -d "/usr/local/homebrew" ]]; then
   eval "$(/usr/local/homebrew/bin/brew shellenv)"
 elif [[ -d "/opt/homebrew" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+
+
+if has-cmd "zed"; then
+  export VISUAL="zed --wait"
+else 
+  export VISUAL="vim"
+fi
+export EDITOR=$VISUAL
 
 # Update PATH (may get reset when in zshenv, so it's also in zshrc)
 export PATH=$HOME/bin:$PATH
@@ -20,6 +29,7 @@ export PATH=$PATH:$GOROOT/bin
 if has-cmd "go"; then
   export PATH=$PATH:$(go env GOPATH)/bin
 fi
+
 
 # placate some random zgenom plugin
 function python() {

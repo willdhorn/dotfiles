@@ -1,5 +1,4 @@
-# -bash: $: command not found <- You die now!!!
-# ignore leading dollar signs
+# ignore leading dollar signs from copy-pasted commands
 $ () {
   "$@"
 }
@@ -47,4 +46,3 @@ ping()
     # Run ping
     $realping $options $hostname
 }
-

@@ -3,102 +3,126 @@
 	name = will
 	email = 88556285+willdhorn@users.noreply.github.com
 [core]
-	excludesFile = ~/dotfiles/git/gitignore
+	excludesfile = ~/dotfiles/git/gitignore
+	pager = "less -FX"
 
-# always use ssh instead of http
+# always connect to github using ssh
 [url "ssh://git@github.com/"]
     insteadOf = https://github.com/
-
-[pretty]
-	# credit: this guy: https://github.com/alfunx/.dotfiles/blob/2d22e8de8a63432909c005991698b41ab39b6f7f/.gitconfig#L227-L235
-	# o = one line
-	# c = two lines per commit with newlines inbetween (compact)
-
-	# log
-	lo  = tformat:%C(auto)%h%C(reset)%C(auto)%d%C(reset) %s %C(italic blue)%ad%C(reset) %C(241)%aN%C(reset)
-	lc  =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n
-
-	# reflog
-	rlo = tformat:%C(auto)%h%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset)%C(auto)%d%C(reset) %gs %C(italic blue)%ad%C(reset) %C(241)%aN%C(reset)
-	rlc =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n %C(white)⤷%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset) %gs %C(241)- %gN <%gE>%C(reset)%n
 
 [alias]
 	aa = add -A
 
-	# Commit
-	# BeforeFlags
-	#  	* a - Add (git add -A) 
-	# After Flags
-	# 	* a - Ammend
-	# 		* n - No-Edit; can't be used with `m`
-	# 	* m - Message
-	#		* f - Force (--no-verify)
+	#* Commit
+	#: BeforeFlags
+	#:  	* a - Add (git add -A) 
+	#: After Flags
+	#: 	* a - Ammend
+	#: 		* n - No-Edit; can't be used with `m`
+	#: 	* m - Message
+	#:  * f - Force (--no-verify)
 	c    = commit
 	cf   = commit --no-verify
 	ca   = commit --amend
 	caf  = commit --amend --no-verify
 	can  = commit --amend --no-edit
 	canf = commit --amend --no-edit --no-verify
-	# Add all and Commit
+	#: Add all and Commit
 	ac    = "!git aa && git c"
 	acf   = "!git aa && git cf"
 	aca   = "!git aa && git ca"
 	acaf  = "!git aa && git caf"
 	acan  = "!git aa && git can"
 	acanf = "!git aa && git canf"
-	# Commit with message
+	#: Commit with message
 	cm   = "!f() { git c -m \"$*\"; }; f"
 	cam  = "!f() { git ca -m \"$*\"; }; f"
 	camf = "!f() { git caf -m \"$*\"; }; f"
-	# Add all and Commit with message
+	#: Add all and Commit with message
 	acm   = "!f() { git ac -m \"$*\"; }; f"
 	acmf  = "!f() { git acf -m \"$*\"; }; f"
 	acam  = "!f() { git aca -m \"$*\"; }; f"
 	acamf = "!f() { git acaf -m \"$*\"; }; f"
 
-	# reset
+	#* Tags
+	td  = tag --delete
+	#: (t)ag (r)elease (m)inor - New minor version tag
+	trm = "!zsh -c _git_increment_minor_version_tag"
+	#: (t)ag (r)elease (p)atch - New patch version tag
+	trp = "!f() { zsh -c \"_git_increment_patch_version_tag $1\"; }; f"
+	#: (t)ag (r)elease (init) - Initialize version tag
+	trinit = "!zsh -c _git_init_semantic_version_tag" 
+
+	#* Reset
 	undo = reset --soft HEAD~
 	unstage = reset --soft HEAD^
 	forget = reset --hard origin
 
-	# log
-	l  = log --pretty=lc --graph
-	lo = log --pretty=lo --graph --date=human
-	ll = log --pretty=lo -graph --numstat
+	#* Log
+	#: one line
+	l   = log --pretty=lo --graph --date=human
+	lo  = log --pretty=lo --graph --date=human
+	ln  = log --pretty=lo --graph --date=human --stat
+	#: compact
+	ll  = log --pretty=lc --graph
+	lc  = log --pretty=lc --graph
+	lln = log --pretty=lc --graph --stat
+	#: full
+	lf  = log --pretty=lf --graph
+	lfn = log --pretty=lf --graph --stat
 
-	# status
+	#* Reflog
+	rl  = reflog --pretty=rlc
+	rlo = reflog --pretty=rlo
+	rlf = reflog --pretty=rlf
+	rld = reflog --pretty=rlf --stat
+
+	#* Status
 	s  = status -sM
 	ss = status -M
 
-	# list aliases
+	#* Diff
+	d  = diff
+	dn = diff --stat
+
+	#* list things
+	#: list tracked files
+	ls = ls-files --deduplicate
+	#: list tags
+	lst = for-each-ref --sort=-taggerdate --format '%(refname:strip=2)' refs/tags
+	#: list aliases
 	lsa = "!git config -l | grep alias | cut -c 7-"
-	
-	# Merging
+
+	#* Merging
 	ours = "!f() { git co --ours $@ && git add $@; }; f"
 	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
-	# Changes [branch] name to done-[branch]
-	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
 	
-	# Push
+	#* Push
 	p = push
+	pt = "!f() { git tag $1 && git p }; f"
 	pf = push -f
+
 	
-	# Checkout
+	#* Checkout
 	co = checkout
-	cob = chechout -b
 
-	# Various
-	cp = cherry-pick
+	#* Branch
 	br = branch
-	f = ls-files --deduplicate
+  #: Changes [branch] name to done-[branch]
+	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
 
-	# git git ...
+	#* misc
+	#: Open repo in browser
+	open = "!f() { URL=$(git config remote.${1:-origin}.url); xdg-open \"${URL%%.git}\"; }; f"
+	hub = "!f() { URL=$(git config remote.${1:-origin}.url); xdg-open \"${URL%%.git}\"; }; f"
+	#: git git ...
 	git = "!git"
 
 [push]
 	# automatically sets upstream of new branches
 	autoSetupRemote = true
 	default = simple
+	followTags = true
 [pull]
 	rebase = true
 [filter "lfs"]
@@ -109,8 +133,18 @@
 [init]
 	defaultBranch = main
 
+[log]
+	abbrevCommit = true
+	decorate = short
+	date = format:%a, %Y-%m-%d %R (%z)
+	follow = true
+	graphColors = 1,2,3,4,5,6,8,166,9,10,11,12,13,14,15,208
+	showRoot = true
+	mailmap = true
+
 [merge]
 	tool = vscode
+	ff = false
 [mergetool "vscode"]
 	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 [diff]
@@ -118,3 +152,107 @@
 	algorithm = histogram
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
+
+[rerere]
+	enabled = true
+
+[format]
+	pretty = lo
+
+# credit: this guy: https://github.com/alfunx/.dotfiles/blob/2d22e8de8a63432909c005991698b41ab39b6f7f/.gitconfig#L227-L235
+
+[pretty]
+	# o = (o)ne line
+	# c = (c)ompact - two lines per commit with newlines inbetween
+	# f = (f)ull - lots of details
+	# t = (t)ags or (t)railers
+
+	# Log
+	lo  = tformat:%C(auto)%h%C(reset)%C(auto)%d%C(reset) %s %C(italic blue)%ad%C(reset) %C(241)%aN%C(reset)
+	lc  =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n
+	lt  =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n%w(0,7,7)%+(trailers:only,unfold)
+	lf  =  format:%C(auto)%h%C(reset)%C(auto)%d%C(reset)   %C(italic 239)[P: %p] [T: %t]%C(reset)%n%C(white)Author:%C(reset)   %aN %C(241)<%aE>%C(reset)%n          %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%n%C(white)Commit:%C(reset)   %cN %C(241)<%cE>%C(reset)   %C(italic 239)[GPG: %G?% GK]%C(reset)%n          %C(italic blue)%cd%C(reset) %C(italic cyan)(%cr)%C(reset)%w(0,4,4)%n%n%C(bold)%s%C(reset)%n%n%-b%n%n%-N%n
+	# Reflog
+	rlo = tformat:%C(auto)%h%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset)%C(auto)%d%C(reset) %gs %C(italic blue)%ad%C(reset) %C(241)%aN%C(reset)
+	rlc =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n %C(white)⤷%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset) %gs %C(241)- %gN <%gE>%C(reset)%n
+	rlt =  format:%C(auto)%h%C(reset) %C(white)-%C(reset) %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%C(auto)%d%C(reset)%n %C(white)⤷%C(reset) %s %C(241)- %aN <%aE>%C(reset)%n %C(white)⤷%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset) %gs %C(241)- %gN <%gE>%C(reset)%n%w(0,7,7)%+(trailers:only,unfold)
+	rlf =  format:%C(auto)%h%C(reset) %C(bold yellow)(%C(magenta)%gd%C(bold yellow))%C(reset)%C(auto)%d%C(reset)   %C(italic 239)[P: %p] [T: %t]%C(reset)%n%C(white)Author:%C(reset)   %aN %C(241)<%aE>%C(reset)%n          %C(italic blue)%ad%C(reset) %C(italic cyan)(%ar)%C(reset)%n%C(white)Commit:%C(reset)   %cN %C(241)<%cE>%C(reset)   %C(italic 239)[GPG: %G?% GK]%C(reset)%n          %C(italic blue)%cd%C(reset) %C(italic cyan)(%cr)%C(reset)%n%C(white)Reflog:%C(reset)   %gN %C(241)<%gE>%C(reset)%n          %C(italic)%gs%C(reset)%w(0,4,4)%n%n%C(bold)%s%C(reset)%n%n%-b%n%n%-N%n
+
+[color]
+	advice = true
+	branch = true
+	diff = true
+	grep = true
+	interactive = true
+	pager = true
+	push = true
+	remote = true
+	showBranch = true
+	status = true
+	transport = true
+	ui = true
+
+[color "branch"]
+	current = 14
+	local = 10
+	remote = 9
+	upstream = 208
+	plain = 15
+
+[color "decorate"]
+	branch = 2 bold
+	remoteBranch = 1 bold
+	tag = 3 bold
+	stash = 5 bold
+	HEAD = 6 bold
+	grafted = 4 bold
+
+[color "diff"]
+	context = 15
+	meta = 4 bold reverse
+	frag = 3 bold reverse
+	func = 166 bold reverse
+	commit = 3 bold
+	old = 9
+	new = 10
+	oldMoved = 8
+	newMoved = 14
+	oldMovedAlternative = 8
+	newMovedAlternative = 14
+	whitespace = 1 reverse
+
+[color "diff-highlight"]
+	oldHighlight = ul
+	oldReset = noul
+	newHighlight = ul
+	newReset = noul
+
+[color "interactive"]
+	prompt = 4 bold
+	header = 15 bold
+	help = 15
+	error = 1
+
+[color "push"]
+	error = 1 bold
+
+[color "transport"]
+	rejected = 1 bold
+
+[color "remote"]
+	hint = 5 bold
+	warning = 3 bold
+	success = 2 bold
+	error = 1 bold
+
+[color "status"]
+	header = 15 bold
+	added = 14 bold
+	changed = 11 bold
+	untracked = 9 bold
+	branch = 2 bold
+	nobranch = 3 bold
+	localBranch = 2 bold
+	remoteBranch = 1 bold
+	unmerged = 9 bold reverse
+	
