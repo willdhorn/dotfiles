@@ -48,6 +48,7 @@ has-dir "$zgenom_dir" load-zgenom
 # source aliases after setup to make sure aliased commands have been installed
 source $ZSHDIR/aliases.zsh
 source $ZSHDIR/functions.zsh
+source $ZSHDIR/misc.zsh
 
 # idk why but the util plugin doesn't seem to be setting history options correctly
 # so I'm sourcing the file directly

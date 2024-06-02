@@ -92,6 +92,8 @@
 	lst = for-each-ref --sort=-taggerdate --format '%(refname:strip=2)' refs/tags
 	#: list aliases
 	lsa = "!git config -l | grep alias | cut -c 7-"
+	#: list branches
+	lsb = branch --all
 
 	#* Merging
 	ours = "!f() { git co --ours $@ && git add $@; }; f"
@@ -101,20 +103,21 @@
 	p = push
 	pt = "!f() { git tag $1 && git p }; f"
 	pf = push -f
-
 	
 	#* Checkout
-	co = checkout
+	co  = checkout
+	cob = checkout -b
 
-	#* Branch
-	br = branch
+	#* Branch / Switch
+	#: Switch to 1) existing branch 2) new branch 3) previous branch if none is given
+	sw = "!f() { if [[ $# -eq 1 ]]; then git switch $1 2>/dev/null || git switch -c $1; else git switch -; fi; }; f"	br = branch
   #: Changes [branch] name to done-[branch]
 	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
 
 	#* misc
 	#: Open repo in browser
 	open = "!f() { URL=$(git config remote.${1:-origin}.url); xdg-open \"${URL%%.git}\"; }; f"
-	hub = "!f() { URL=$(git config remote.${1:-origin}.url); xdg-open \"${URL%%.git}\"; }; f"
+	hub = open
 	#: git git ...
 	git = "!git"
 
