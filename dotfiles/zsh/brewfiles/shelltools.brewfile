@@ -15,6 +15,10 @@ brew "gh"
 brew "bitwarden-cli"
 brew "fswatch"
 
+# Doppler secrets manager
+brew "gnupg"
+brew "doppler"
+
 # Tools that generate previews for fzf-zsh-plugin
 brew "bat"
 brew "exa" # deprecated

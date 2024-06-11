@@ -144,3 +144,17 @@ function is-silicon-mac() {
   if ! is-mac; then return 0; fi
   [[ "$(uname -m)" == "arm64" ]]
 }
+
+function addPath() {
+  case ":$PATH:" in
+    *":$1:"*) :;; # already there
+    *) PATH="$1:$PATH";; # or PATH="$PATH:$1"
+  esac
+}
+
+function addFPath() {
+  case ":$FPATH:" in
+    *":$1:"*) :;; # already there
+    *) FPATH="$1:$FPATH";; # or FPATH="$FPATH:$1"
+  esac
+}

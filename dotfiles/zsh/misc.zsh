@@ -6,3 +6,6 @@ bindkey "^U" backward-kill-line
 
 # docker completions
 source <(docker completion zsh)
+
+# doppler completions
+source <(doppler completion zsh)

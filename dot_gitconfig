@@ -21,6 +21,9 @@
 	#: 		* n - No-Edit; can't be used with `m`
 	#: 	* m - Message
 	#:  * f - Force (--no-verify)
+	#//:  * t - Tags
+	#//:    * tp - increment Patch version
+	#//:    * tm - incement Minor version
 	c    = commit
 	cf   = commit --no-verify
 	ca   = commit --amend
