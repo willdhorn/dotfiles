@@ -29,3 +29,6 @@ function mcd() {
 
 # node
 alias ncu="npx npm-check-updates"
+
+# digital ocean
+alias droplets='doctl compute droplet list --format Name,PublicIPv4 --no-header'
