@@ -86,6 +86,7 @@
 
 	#* Diff
 	d  = diff
+	dt = difftool -y
 	dn = diff --stat
 
 	#* list things
@@ -156,6 +157,9 @@
 [diff]
 	tool = vscode
 	algorithm = histogram
+	# shows word diff (vs line diff)
+	mnemonicPrefix = true
+  wordRegex = .
 [difftool "vscode"]
 	cmd = code --wait --diff $LOCAL $REMOTE
 
