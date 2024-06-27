@@ -12,11 +12,11 @@ fi
 export POWERLEVEL9K_INSTANT_PROMPT=quiet 
 
 # Update PATH
-export PATH=$HOME/bin:$PATH
+addPath $HOME/bin
 export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin
+addpath $GOROOT/bin
 if has-cmd "go"; then
-  export PATH=$PATH:$(go env GOPATH)/bin
+  addPath $(go env GOPATH)/bin
 fi
 
 # brew env vars and path
@@ -28,8 +28,11 @@ fi
 
 # brew completions
 if has-cmd "brew"; then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+  addFpath "$(brew --prefix)/share/zsh/site-functions"
 fi
+
+# add zfunc to fpath
+addFpath "$HOME/.zfunc"
 
 
 source $ZSHDIR/init_machine-mac.zsh
@@ -48,7 +51,7 @@ has-dir "$zgenom_dir" load-zgenom
 # source aliases after setup to make sure aliased commands have been installed
 source $ZSHDIR/aliases.zsh
 source $ZSHDIR/functions.zsh
-source $ZSHDIR/misc.zsh
+source $ZSHDIR/key_binds.zsh
 
 # idk why but the util plugin doesn't seem to be setting options correctly
 # so I'm sourcing the files directly

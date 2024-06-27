@@ -90,6 +90,8 @@ function load-zgenom() {
     # local plugins copied from zsh-utlis
     zgenom load "$plugins_dir/utils"
 
+    # * Completions
+
     # edgedb
     zgenom eval --name edgedb-cli '
       if ! command -v edgedb &> /dev/null; then
@@ -97,6 +99,20 @@ function load-zgenom() {
       fi
       if [[ ! -f $HOME/.zfunc/_edgedb ]]; then
         edgedb _gen_completions --shell zsh > $HOME/.zfunc/_edgedb
+      fi
+    '
+
+    # docker
+    zgenom eval --name docker-completions '
+      if [[ ! -f $HOME/.zfunc/_docker ]]; then
+        docker completion zsh > $HOME/.zfunc/_docker
+      fi
+    '
+
+    # doppler
+    zgenom eval --name doppler-completions '
+      if [[ ! -f $HOME/.zfunc/_doppler ]]; then
+        doppler completion zsh > $HOME/.zfunc/_doppler
       fi
     '
 
