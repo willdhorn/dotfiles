@@ -14,7 +14,7 @@ export POWERLEVEL9K_INSTANT_PROMPT=quiet
 # Update PATH
 addPath $HOME/bin
 export GOPATH=$HOME/go
-addpath $GOROOT/bin
+addPath $GOROOT/bin
 if has-cmd "go"; then
   addPath $(go env GOPATH)/bin
 fi
@@ -28,11 +28,11 @@ fi
 
 # brew completions
 if has-cmd "brew"; then
-  addFpath "$(brew --prefix)/share/zsh/site-functions"
+  addFPath "$(brew --prefix)/share/zsh/site-functions"
 fi
 
 # add zfunc to fpath
-addFpath "$HOME/.zfunc"
+addFPath "$HOME/.zfunc"
 
 
 source $ZSHDIR/init_machine-mac.zsh
@@ -64,3 +64,6 @@ source $ZSHDIR/plugins/utils/opts/history.zsh
 if [[ $TERM_PROGRAM == "iTerm.app" ]] && [[ -f "${ITERMDIR}/.iterm2_shell_integration.zsh" ]] && ( has-flag ${FLAG_BREW_MACAPPS} ); then
     source "${ITERMDIR}/.iterm2_shell_integration.zsh"
 fi
+
+# disable paste bracketing magic (ie don't paste one character at a time)
+export DISABLE_MAGIC_FUNCTIONS=true
