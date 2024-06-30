@@ -67,7 +67,7 @@
     # php_version           # php version (https://www.php.net/)
     # laravel_version       # laravel php framework version (https://laravel.com/)
     java_version          # java version (https://www.java.com/)
-    package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
+    # package               # name@version from package.json (https://docs.npmjs.com/files/package.json)
     rbenv                   # ruby version from rbenv (https://github.com/rbenv/rbenv)
     rvm                     # ruby version from rvm (https://rvm.io)
     fvm                     # flutter version management (https://github.com/leoafarias/fvm)
@@ -375,18 +375,20 @@
   # typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=8
 
   # Branch icon. Set this parameter to '\uF126 ' for the popular Powerline branch icon.
-  typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
+  typeset -g POWERLEVEL9K_VCS_BRANCH_ICON=' '
+  typeset -g __wdh__POWERLEVEL9K_VCS_TAG_ICON=' '
 
-
-  typeset -g __wdh__POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON=''
-  typeset -g __wdh__POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON=''
+  # Most of these don't need trailing spaces because the number appears to the left and each
+  # individual vcs_info content starts with a space.
+  typeset -g __wdh__POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON=''
+  typeset -g __wdh__POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON=''
   typeset -g __wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND_ICON=''
   typeset -g __wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON=''
-  typeset -g __wdh__POWERLEVEL9K_VCS_STASHES_ICON='󱑤'
-  typeset -g __wdh__POWERLEVEL9K_VCS_CONFLICTS_ICON='󰀨'
+  typeset -g __wdh__POWERLEVEL9K_VCS_STASHES_ICON=''
+  typeset -g __wdh__POWERLEVEL9K_VCS_CONFLICTS_ICON=''
   typeset -g __wdh__POWERLEVEL9K_VCS_STAGED_ICON='󰐗'
   typeset -g __wdh__POWERLEVEL9K_VCS_UNSTAGED_ICON='󰐙'
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='󰙝'
+  typeset -g __wdh__POWERLEVEL9K_VCS_UNTRACKED_ICON='󰐕'
 
   # Untracked files icon. It's really a question mark, your font isn't broken.
   # Change the value of this parameter to show a different icon.
@@ -422,6 +424,13 @@
     if [[ -n $VCS_STATUS_LOCAL_BRANCH ]]; then
       res+="${clean}${(g::)POWERLEVEL9K_VCS_BRANCH_ICON}"
       where=${(V)VCS_STATUS_LOCAL_BRANCH}
+      # credit: Syphdias (https://github.com/romkatv/powerlevel10k/issues/391#issuecomment-612702692)
+      if [[ -n $VCS_STATUS_TAG ]]; then
+          (( $#where > 32 )) && where[13,-13]="…"
+          res+="${clean}${where//\%/%%}"  # escape %
+          res+=" ${meta}${__wdh__POWERLEVEL9K_VCS_TAG_ICON}"
+          where=${(V)VCS_STATUS_TAG}
+      fi
     elif [[ -n $VCS_STATUS_TAG ]]; then
       res+="${meta}#"
       where=${(V)VCS_STATUS_TAG}
@@ -450,9 +459,9 @@
     (( VCS_STATUS_COMMITS_AHEAD  )) && res+=" ${clean}${VCS_STATUS_COMMITS_AHEAD}${__wdh__POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON}"
     # ⇠42 if behind the push remote.
     (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}${VCS_STATUS_PUSH_COMMITS_BEHIND}${__wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND_ICON}"
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
-    # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}${VCS_STATUS_PUSH_COMMITS_AHEAD}${__wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON}"
+    # ⇢42 if ahead of the push remote; no leading space (except for the required one) if also behind: ⇠42⇢42.
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" " # add an extra leading space
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+=" ${clean}${VCS_STATUS_PUSH_COMMITS_AHEAD}${__wdh__POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON}"
     # *42 if have stashes.
     # (( VCS_STATUS_STASHES        )) && res+=" ${clean}${VCS_STATUS_STASHES}${__wdh__POWERLEVEL9K_VCS_STASHES_ICON}"
     # 'merge' if the repo is in an unusual state.
@@ -466,7 +475,7 @@
     # ?42 if have untracked files. It's really a question mark, your font isn't broken.
     # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
     # Remove the next line if you don't want to see untracked files at all.
-    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${(g::)POWERLEVEL9K_VCS_UNTRACKED_ICON}${VCS_STATUS_NUM_UNTRACKED}"
+    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}${VCS_STATUS_NUM_UNTRACKED}${__wdh__POWERLEVEL9K_VCS_UNTRACKED_ICON}"
     # "─" if the number of unstaged files is unknown. This can happen due to
     # POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY (see below) being set to a non-negative number lower
     # than the number of files in the Git index, or due to bash.showDirtyState being set to false
