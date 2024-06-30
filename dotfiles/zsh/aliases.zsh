@@ -26,6 +26,8 @@ alias mkdir='mkdir -pv'
 function mcd() {
   command mkdir -pv "$1" && cd "$1"
 }
+# chmod
+alias chx='chmod +x'
 
 # node
 alias ncu="npx npm-check-updates"

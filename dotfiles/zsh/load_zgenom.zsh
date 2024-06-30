@@ -116,6 +116,13 @@ function load-zgenom() {
       fi
     '
 
+    # ipinfo
+    zgenom eval --name ipinfo-completions '
+      if [[ -f /opt/homebrew/bin/ipinfo ]]; then
+        complete -o default -C /opt/homebrew/bin/ipinfo ipinfo
+      fi
+    '
+
     # always load syntax highlighting at the end
     zgenom load zdharma-continuum/fast-syntax-highlighting
 
