@@ -62,10 +62,9 @@ function load-zgenom() {
     export FZF_PREVIEW_WINDOW='right:65%:nohidden'
 
     zgenom load Aloxaf/fzf-tab          # NOTE: fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
-    zgenom load Freed-Wu/fzf-tab-source # adds file previews to fzf-tab
+    
 
-    # zsh-autosuggestions [must be loaded after fzf-tab]
-    zgenom load zsh-users/zsh-autosuggestions # NOTE: zsh-autosuggestions needs to be loaded after all plugins that trigger complutions (i think...mainly fzf-tab)
+    zgenom load Freed-Wu/fzf-tab-source # adds file previews to fzf-tab
 
     # Color
     zgenom load zpm-zsh/colorize
@@ -122,6 +121,9 @@ function load-zgenom() {
         complete -o default -C /opt/homebrew/bin/ipinfo ipinfo
       fi
     '
+
+    # zsh-autosuggestions [must be loaded after fzf-tab]
+    zgenom load zsh-users/zsh-autosuggestions # NOTE: zsh-autosuggestions needs to be loaded after all plugins that trigger complutions (i think...mainly fzf-tab)
 
     # always load syntax highlighting at the end
     zgenom load zdharma-continuum/fast-syntax-highlighting
