@@ -31,10 +31,16 @@ if has-cmd "go"; then
 fi
 
 
-# placate some random zgenom plugin
-function python() {
-  /usr/bin/python3 "$@"
-}
+# # placate some random zgenom plugin
+# function python() {
+#   /usr/bin/python3 "$@"
+# }
+
+# === pyenv ===
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 
 # === script utils ===
 

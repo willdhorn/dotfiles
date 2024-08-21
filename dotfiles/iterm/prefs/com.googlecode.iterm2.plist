@@ -2302,6 +2302,8 @@ The script should do this: \(ai.prompt)</string>
 			<string></string>
 			<key>AWDS Window Option</key>
 			<string>No</string>
+			<key>Allow Paste Bracketing</key>
+			<true/>
 			<key>Allow Title Reporting</key>
 			<true/>
 			<key>Allow Title Setting</key>
@@ -3187,7 +3189,7 @@ The script should do this: \(ai.prompt)</string>
 			<key>Silence Bell</key>
 			<true/>
 			<key>Smart Cursor Color</key>
-			<true/>
+			<false/>
 			<key>Status Bar Layout</key>
 			<dict>
 				<key>advanced configuration</key>
@@ -3201,16 +3203,16 @@ The script should do this: \(ai.prompt)</string>
 						<key>Alpha Component</key>
 						<real>1</real>
 						<key>Blue Component</key>
-						<real>0.895233154296875</real>
+						<real>0.88961368799209595</real>
 						<key>Color Space</key>
-						<string>sRGB</string>
+						<string>P3</string>
 						<key>Green Component</key>
-						<real>0.88231134414672852</real>
+						<real>0.87342387437820435</real>
 						<key>Red Component</key>
-						<real>0.52767884731292725</real>
+						<real>0.6109958291053772</real>
 					</dict>
 					<key>font</key>
-					<string>MesloLGS-NF-Bold 12</string>
+					<string>Menlo-Regular 11</string>
 					<key>remove empty components</key>
 					<false/>
 					<key>separator color 2</key>
@@ -3220,7 +3222,7 @@ The script should do this: \(ai.prompt)</string>
 						<key>Blue Component</key>
 						<real>0.0</real>
 						<key>Color Space</key>
-						<string>sRGB</string>
+						<string>P3</string>
 						<key>Green Component</key>
 						<real>0.0</real>
 						<key>Red Component</key>
@@ -3241,25 +3243,27 @@ The script should do this: \(ai.prompt)</string>
 								<key>base: priority</key>
 								<real>10</real>
 								<key>format</key>
-								<string>hh:mm:ss P</string>
+								<string>HH:mm:ss x</string>
 								<key>localize</key>
-								<integer>1</integer>
+								<integer>0</integer>
 								<key>maxwidth</key>
 								<real>+infinity</real>
 								<key>minwidth</key>
 								<string>0</string>
+								<key>shared font</key>
+								<string></string>
 								<key>shared text color</key>
 								<dict>
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.62999999523162842</real>
+									<real>0.63590961694717407</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
-									<real>0.62999999523162842</real>
+									<real>0.6414334774017334</real>
 									<key>Red Component</key>
-									<real>0.89999997615814209</real>
+									<real>0.86000317335128784</real>
 								</dict>
 							</dict>
 							<key>layout advanced configuration dictionary value</key>
@@ -3273,16 +3277,16 @@ The script should do this: \(ai.prompt)</string>
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.895233154296875</real>
+									<real>0.88961368799209595</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
-									<real>0.88231134414672852</real>
+									<real>0.87342387437820435</real>
 									<key>Red Component</key>
-									<real>0.52767884731292725</real>
+									<real>0.6109958291053772</real>
 								</dict>
 								<key>font</key>
-								<string>MesloLGS-NF-Bold 12</string>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
 								<key>separator color 2</key>
@@ -3292,7 +3296,7 @@ The script should do this: \(ai.prompt)</string>
 									<key>Blue Component</key>
 									<real>0.0</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
 									<real>0.0</real>
 									<key>Red Component</key>
@@ -3342,16 +3346,16 @@ The script should do this: \(ai.prompt)</string>
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.895233154296875</real>
+									<real>0.88961368799209595</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
-									<real>0.88231134414672852</real>
+									<real>0.87342387437820435</real>
 									<key>Red Component</key>
-									<real>0.52767884731292725</real>
+									<real>0.6109958291053772</real>
 								</dict>
 								<key>font</key>
-								<string>MesloLGS-NF-Bold 12</string>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
 								<key>separator color 2</key>
@@ -3361,7 +3365,7 @@ The script should do this: \(ai.prompt)</string>
 									<key>Blue Component</key>
 									<real>0.0</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
 									<real>0.0</real>
 									<key>Red Component</key>
@@ -3390,8 +3394,36 @@ The script should do this: \(ai.prompt)</string>
 								<integer>1</integer>
 								<key>auto-rainbow style</key>
 								<integer>0</integer>
+								<key>default text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.88961368799209595</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.87342387437820435</real>
+									<key>Red Component</key>
+									<real>0.6109958291053772</real>
+								</dict>
+								<key>font</key>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
+								<key>separator color 2</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.0</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.0</real>
+									<key>Red Component</key>
+									<real>0.0</real>
+								</dict>
 							</dict>
 						</dict>
 					</dict>
@@ -3419,8 +3451,36 @@ The script should do this: \(ai.prompt)</string>
 								<integer>1</integer>
 								<key>auto-rainbow style</key>
 								<integer>0</integer>
+								<key>default text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.88961368799209595</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.87342387437820435</real>
+									<key>Red Component</key>
+									<real>0.6109958291053772</real>
+								</dict>
+								<key>font</key>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
+								<key>separator color 2</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.0</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.0</real>
+									<key>Red Component</key>
+									<real>0.0</real>
+								</dict>
 							</dict>
 						</dict>
 					</dict>
@@ -3446,8 +3506,36 @@ The script should do this: \(ai.prompt)</string>
 								<integer>1</integer>
 								<key>auto-rainbow style</key>
 								<integer>0</integer>
+								<key>default text color</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.88961368799209595</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.87342387437820435</real>
+									<key>Red Component</key>
+									<real>0.6109958291053772</real>
+								</dict>
+								<key>font</key>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
+								<key>separator color 2</key>
+								<dict>
+									<key>Alpha Component</key>
+									<real>1</real>
+									<key>Blue Component</key>
+									<real>0.0</real>
+									<key>Color Space</key>
+									<string>P3</string>
+									<key>Green Component</key>
+									<real>0.0</real>
+									<key>Red Component</key>
+									<real>0.0</real>
+								</dict>
 							</dict>
 						</dict>
 					</dict>
@@ -3485,16 +3573,16 @@ The script should do this: \(ai.prompt)</string>
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.895233154296875</real>
+									<real>0.88961368799209595</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
-									<real>0.88231134414672852</real>
+									<real>0.87342387437820435</real>
 									<key>Red Component</key>
-									<real>0.52767884731292725</real>
+									<real>0.6109958291053772</real>
 								</dict>
 								<key>font</key>
-								<string>MesloLGS-NF-Bold 12</string>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
 								<key>separator color 2</key>
@@ -3504,7 +3592,7 @@ The script should do this: \(ai.prompt)</string>
 									<key>Blue Component</key>
 									<real>0.0</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
 									<real>0.0</real>
 									<key>Red Component</key>
@@ -3551,16 +3639,16 @@ The script should do this: \(ai.prompt)</string>
 									<key>Alpha Component</key>
 									<real>1</real>
 									<key>Blue Component</key>
-									<real>0.895233154296875</real>
+									<real>0.88961368799209595</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
-									<real>0.88231134414672852</real>
+									<real>0.87342387437820435</real>
 									<key>Red Component</key>
-									<real>0.52767884731292725</real>
+									<real>0.6109958291053772</real>
 								</dict>
 								<key>font</key>
-								<string>MesloLGS-NF-Bold 12</string>
+								<string>Menlo-Regular 11</string>
 								<key>remove empty components</key>
 								<false/>
 								<key>separator color 2</key>
@@ -3570,7 +3658,7 @@ The script should do this: \(ai.prompt)</string>
 									<key>Blue Component</key>
 									<real>0.0</real>
 									<key>Color Space</key>
-									<string>sRGB</string>
+									<string>P3</string>
 									<key>Green Component</key>
 									<real>0.0</real>
 									<key>Red Component</key>
