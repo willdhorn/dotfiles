@@ -95,7 +95,7 @@ function load-zgenom() {
     # edgedb
     zgenom eval --name edgedb-cli '
       if ! command -v edgedb &> /dev/null; then
-        /bin/sh -c $(curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com) -- -y
+        /bin/sh -c $(curl --proto https --tlsv1.2 -sSf https://sh.edgedb.com) -- -y
       fi
       if [[ ! -f $HOME/.zfunc/_edgedb ]]; then
         edgedb _gen_completions --shell zsh > $HOME/.zfunc/_edgedb
