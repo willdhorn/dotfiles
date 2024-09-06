@@ -18,6 +18,8 @@ addPath $GOROOT/bin
 if has-cmd "go"; then
   addPath $(go env GOPATH)/bin
 fi
+# for edgedb - it's in .zprofile, but I accidentally deleted that once and it fucked up my ability to use edgedb
+export PATH="/Users/will/Library/Application Support/edgedb/bin:$PATH"
 
 # brew env vars and path
 if [[ -d "/usr/local/homebrew" ]]; then

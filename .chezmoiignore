@@ -3,3 +3,4 @@
 .oh-my-zsh/**/*.zwc
 .DS_Store
 ./dot_zshrc_old.tmpl
+.zshrc_old
