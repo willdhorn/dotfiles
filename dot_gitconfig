@@ -124,7 +124,8 @@
 
 	#* Branch / Switch
 	#: Switch to 1) existing branch 2) new branch 3) previous branch if none is given
-	sw = "!f() { if [[ $# -eq 1 ]]; then git switch $1 2>/dev/null || git switch -c $1; else git switch -; fi; }; f"	br = branch
+	sw = "!sh -c 'if [ $# -eq 1 ]; then git switch \"$1\" 2>/dev/null || git switch -c \"$1\"; else git switch -; fi' -"
+	br = branch
   #: Changes [branch] name to done-[branch]
 	done = "!f() { git branch | grep "$1" | cut -c 3- | grep -v done | xargs -I{} git branch -m {} done-{}; }; f"
 
