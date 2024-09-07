@@ -24,6 +24,16 @@ function _git_latest_version_tag() {
   fi
 }
 
+function _git_print_latest_version_tag() {
+  latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:strip=2)' refs/tags | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$' | head -n 1)
+  
+  if [[ -z "$latest_tag" ]]; then
+    echo "No annotated tags found in the repository."
+    return 1
+  fi
+  echo $latest_tag
+}
+
 # create a new Git tag in a semantic versioning format from the provided major, minor, patch numbers, and optional prerelease identifier
 function _git_make_semantic_version_tag() {
   if [[ $# -lt 3 || $# -gt 4 ]]; then
@@ -87,4 +97,14 @@ function _git_increment_patch_version_tag() {
 
 function _git_init_semantic_version_tag() {
   _git_make_semantic_version_tag 0 1 0
+}
+
+function _git_delete_latest_version_tag() {
+  latest_tag=$(git for-each-ref --sort=-taggerdate --format '%(refname:strip=2)' refs/tags | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$' | head -n 1)
+
+  if [[ -z "$latest_tag" ]]; then
+    echo "No annotated tags found in the repository."
+    return 1
+  fi
+  git tag -d $latest_tag
 }

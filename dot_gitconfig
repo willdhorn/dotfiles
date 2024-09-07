@@ -48,7 +48,12 @@
 	acamf = "!f() { git acaf -m \"$*\"; }; f"
 
 	#* Tags
+	#: (t)ag (d)elete - Delete tag
 	td  = tag --delete
+	#: (t)ag (d)elete (r)elease/(r)ecent - Delete the most recent semantic version tag
+	tdr = "!zsh -c _git_delete_latest_version_tag"
+	#: (t)ag (r)elease/(r)ecent - Get the most recent semantic version tag
+	tr  = "!zsh -c _git_print_latest_version_tag"
 	#: (t)ag (r)elease (m)inor - New minor version tag
 	trm = "!zsh -c _git_increment_minor_version_tag"
 	#: (t)ag (r)elease (p)atch - New patch version tag
@@ -101,6 +106,10 @@
 	lsb = branch --all
 
 	#* Merging
+	mg = merge --no-edit
+	mge = merge --edit
+	mgn = merge --no-commit
+	# ? I don't know if these work
 	ours = "!f() { git co --ours $@ && git add $@; }; f"
 	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
 	
