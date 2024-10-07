@@ -63,7 +63,10 @@
 	trinit = "!zsh -c _git_init_semantic_version_tag" 
 
 	#* Reset
+	# undo commit, keeping changes staged
 	undo = reset --soft HEAD~
+	# discard all uncommited 
+	wipe = reset --hard HEAD
 	# :/ matches all files in the entire repository
 	unstage = "!f() { if [[ -z $@ ]]; then git restore --staged :/; else git restore --staged $@; fi; }; f"
 	forget = reset --hard origin
