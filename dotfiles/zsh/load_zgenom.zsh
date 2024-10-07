@@ -122,6 +122,22 @@ function load-zgenom() {
       fi
     '
 
+    # git aliases and git completion
+    zgenom eval --name git-aliases-and-completions '
+        git config --get-regexp '^alias\.' | while read -r line; do
+          alias_name=$(echo "$line" | cut -d'.' -f2 | cut -d' ' -f1)
+          alias "g$alias_name"="git $alias_name"
+          
+          eval "
+          _git_g$alias_name() {
+            _git_${line#alias.* }
+          }
+          "
+          
+          compdef _git_g$alias_name=git
+        done
+    '
+
     # zsh-autosuggestions [must be loaded after fzf-tab]
     zgenom load zsh-users/zsh-autosuggestions # NOTE: zsh-autosuggestions needs to be loaded after all plugins that trigger complutions (i think...mainly fzf-tab)
 
