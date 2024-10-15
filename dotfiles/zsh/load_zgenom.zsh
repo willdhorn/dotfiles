@@ -124,8 +124,8 @@ function load-zgenom() {
 
     # git aliases and git completion
     zgenom eval --name git-aliases-and-completions '
-        git config --get-regexp '^alias\.' | while read -r line; do
-          alias_name=$(echo "$line" | cut -d'.' -f2 | cut -d' ' -f1)
+        git config --get-regexp '\''^alias\.'\'' | while read -r line; do
+          alias_name=$(echo "$line" | cut -d'\''.'\'' -f2 | cut -d'\'' '\'' -f1)
           alias "g$alias_name"="git $alias_name"
           
           eval "
