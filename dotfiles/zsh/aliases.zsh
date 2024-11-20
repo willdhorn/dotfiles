@@ -32,5 +32,8 @@ alias chx='chmod +x'
 # node
 alias ncu="npx npm-check-updates"
 
+# pnpm
+alias pn="pnpm"
+
 # digital ocean
 alias droplets='doctl compute droplet list --format Name,PublicIPv4 --no-header'

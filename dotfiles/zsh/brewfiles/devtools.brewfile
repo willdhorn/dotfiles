@@ -4,6 +4,9 @@ brew "make"
 brew "gcc"
 brew "node"
 brew "pyenv"
+brew "pnpm"
+brew "neovim"
+brew "edgedb-cli"
 
 # Dev tools
 brew "doctl"

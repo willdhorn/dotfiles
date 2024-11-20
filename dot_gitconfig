@@ -131,6 +131,9 @@
 	sw = "!sh -c 'if [ $# -eq 1 ]; then git switch \"$1\" 2>/dev/null || git switch -c \"$1\"; else git switch -; fi' -"
 	br = branch
 
+	#* Initlize
+	initial = "!f() { git init && git acm Initial commit; }; f"
+
 	#* misc
 	#: Open repo in browser
 	open = "!f() { URL=$(git config remote.${1:-origin}.url); xdg-open \"${URL%%.git}\"; }; f"
