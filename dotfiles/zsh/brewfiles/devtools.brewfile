@@ -1,14 +1,20 @@
 # Build tools and runtimes
 brew "go"
+brew "lua"
+brew "pyenv"
 brew "make"
 brew "gcc"
 brew "node"
-brew "pyenv"
 brew "pnpm"
-brew "neovim"
-brew "edgedb-cli"
 
 # Dev tools
+brew "neovim"
+brew "edgedb-cli"
 brew "doctl"
-# NOTE: CLI bins will not be added to path until Docker Desktop is launched the first time
+brew "dopplerhq/cli/doppler"
+# NOTE: On Mac, CLI bins will not be added to path until Docker Desktop is launched the first time
 cask "docker" # docker desktop
+
+# utils
+brew "ripgrep"
+brew "tldr"
