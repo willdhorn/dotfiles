@@ -13,6 +13,8 @@
 [alias]
 	aa = add -A
 	a = add 
+	# use fzf to add multiple files at once (tab to select, enter to add)
+	af = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -o git add"
 
 	#* Commit
 	#: BeforeFlags
@@ -61,15 +63,6 @@
 	trp = "!f() { zsh -c \"_git_increment_patch_version_tag $1\"; }; f"
 	#: (t)ag (r)elease (init) - Initialize version tag
 	trinit = "!zsh -c _git_init_semantic_version_tag" 
-
-	#* Reset
-	# undo commit, keeping changes staged
-	undo = reset --soft HEAD~
-	# discard all uncommited 
-	wipe = reset --hard HEAD
-	# :/ matches all files in the entire repository
-	unstage = "!f() { if [[ -z $@ ]]; then git restore --staged :/; else git restore --staged $@; fi; }; f"
-	forget = reset --hard origin
 
 	#* Log
 	#: one line
@@ -132,7 +125,7 @@
 	br = branch
 
 	#* Initlize
-	initial = "!f() { git init && git acm Initial commit; }; f"
+	setup = "!f() { git init && git acm Initial commit; }; f"
 
 	#* misc
 	#: Open repo in browser
@@ -141,6 +134,15 @@
 	#: git git ...
 	git = "!git"
 
+	#* Reset
+	#: putting these at the bottom so they show up last when listing aliases (`git lsa`)
+	# undo commit, keeping changes staged
+	undo = reset --soft HEAD~
+	# discard all uncommited 
+	wipe = reset --hard HEAD
+	# :/ matches all files in the entire repository
+	unstage = "!f() { if [[ -z $@ ]]; then git restore --staged :/; else git restore --staged $@; fi; }; f"
+	forget = reset --hard origin
 [push]
 	# automatically sets upstream of new branches
 	autoSetupRemote = true
