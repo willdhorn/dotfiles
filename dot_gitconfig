@@ -24,9 +24,6 @@
 	#: 		* n - No-Edit; can't be used with `m`
 	#: 	* m - Message
 	#:  * f - Force (--no-verify)
-	#//:  * t - Tags
-	#//:    * tp - increment Patch version
-	#//:    * tm - incement Minor version
 	c    = commit
 	cf   = commit --no-verify
 	ca   = commit --amend
@@ -135,13 +132,17 @@
 	git = "!git"
 
 	#* Reset
-	#: putting these at the bottom so they show up last when listing aliases (`git lsa`)
-	# undo commit, keeping changes staged
+	# putting these at the bottom so they show up last when listing aliases (`git lsa`)
+	#: undo commit, keeping changes staged
 	undo = reset --soft HEAD~
-	# discard all uncommited 
+	#: discard all uncommited 
 	wipe = reset --hard HEAD
-	# :/ matches all files in the entire repository
-	unstage = "!f() { if [[ -z $@ ]]; then git restore --staged :/; else git restore --staged $@; fi; }; f"
+	#: unstage changes
+	#: usage:
+	#:   1) `git unstage` - open fzf to select files to unstage
+	#:   2) `git unstage --all` - unstage all files immediately
+	#:   3) `git unstage` then `ctrl-a` - select all files in fzf
+	unstage = "!f() { if [[ $# -eq 1 ]] && [[ $1 == \"--all\" ]]; then git restore --staged :/; else git diff --name-only --cached | fzf --print0 -m --bind 'ctrl-a:select-all' | xargs -0 -t -o git restore --staged; fi; }; f"
 	forget = reset --hard origin
 [push]
 	# automatically sets upstream of new branches
