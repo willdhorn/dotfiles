@@ -13,8 +13,8 @@
 [alias]
 	aa = add -A
 	a = add 
-	# use fzf to add multiple files at once (tab to select, enter to add)
-	af = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -o git add"
+	# use fzf to add multiple files at once (tab to select, enter to add, ctrl-a to select all)
+	af = "!f() { git ls-files -m -o --exclude-standard | fzf --print0 -m --query=\"$1\" | xargs -0 -t -o git add; }; f"
 
 	#* Commit
 	#: BeforeFlags
@@ -49,7 +49,7 @@
 
 	#* Tags
 	#: (t)ag (d)elete - Delete tag
-	td  = tag --delete
+	td = "!f() { git tag | fzf --print0 -m --query=\"$1\" | xargs -0 -t git tag --delete; }; f"
 	#: (t)ag (d)elete (r)elease/(r)ecent - Delete the most recent semantic version tag
 	tdr = "!zsh -c _git_delete_latest_version_tag"
 	#: (t)ag (r)elease/(r)ecent - Get the most recent semantic version tag
@@ -88,6 +88,7 @@
 	d  = diff
 	dt = difftool -y
 	dn = diff --stat
+	df = "!f() { git ls-files -m | fzf --print0 -m --query=\"$1\" | xargs -0 -t git diff; }; f"
 
 	#* list things
 	#: list tracked files
@@ -137,13 +138,13 @@
 	undo = reset --soft HEAD~
 	#: discard all uncommited 
 	wipe = reset --hard HEAD
+	forget = reset --hard origin
 	#: unstage changes
 	#: usage:
 	#:   1) `git unstage` - open fzf to select files to unstage
 	#:   2) `git unstage --all` - unstage all files immediately
 	#:   3) `git unstage` then `ctrl-a` - select all files in fzf
-	unstage = "!f() { if [[ $# -eq 1 ]] && [[ $1 == \"--all\" ]]; then git restore --staged :/; else git diff --name-only --cached | fzf --print0 -m --bind 'ctrl-a:select-all' | xargs -0 -t -o git restore --staged; fi; }; f"
-	forget = reset --hard origin
+	unstage = "!f() { if [[ $# -eq 1 ]] && [[ $1 == \"--all\" ]]; then git restore --staged :/; else git diff --name-only --cached | fzf --print0 -m --query=\"$1\" | xargs -0 -t -o git restore --staged; fi; }; f"
 [push]
 	# automatically sets upstream of new branches
 	autoSetupRemote = true
