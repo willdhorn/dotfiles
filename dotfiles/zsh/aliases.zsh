@@ -34,6 +34,7 @@ alias ncu="npx npm-check-updates"
 
 # pnpm
 alias pn="pnpm"
+alias pnr="pnpm run"
 
 # digital ocean
 alias droplets='doctl compute droplet list --format Name,PublicIPv4 --no-header'

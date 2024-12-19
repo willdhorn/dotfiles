@@ -134,11 +134,14 @@
 
 	#* Reset
 	# putting these at the bottom so they show up last when listing aliases (`git lsa`)
-	#: undo commit, keeping changes staged
+	#: discards most recent commit; leaves changes staged
 	undo = reset --soft HEAD~
-	#: discard all uncommited 
+	#: discard all uncommited changes (including untracked)
 	wipe = reset --hard HEAD
-	forget = reset --hard origin
+	#: discards all local changes not pushed to remote
+	nuke = reset --hard origin
+	#: drops all staged and unstaged changes for selected files (revert selected files to previous commit)
+	drop = "!f() { (git ls-files -m --exclude-standard && git diff --name-only --cached) | sort -u | fzf --print0 -m | xargs -0 -t -o git checkout HEAD --; }; f"
 	#: unstage changes
 	#: usage:
 	#:   1) `git unstage` - open fzf to select files to unstage
