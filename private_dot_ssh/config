@@ -1,24 +1,24 @@
 # Mini pc running Debian
 Host boxbox
-    HostName 10.0.0.200
+    HostName 192.168.1.200
     User wilhor
     TCPKeepAlive yes
 
 # Old MacBook running Debian
-Host debook
-    HostName 10.0.0.201
-    User root
-    TCPKeepAlive yes
-Host benji
-    HostName 10.0.0.201
-    User benji
-    TCPKeepAlive yes
+#Host debook
+#    HostName 10.0.0.201
+#    User root
+#    TCPKeepAlive yes
+#Host benji
+#    HostName 10.0.0.201
+#    User benji
+#    TCPKeepAlive yes
 
 # Old gaming pc running Debian
-Host ogbox
-    HostName 10.0.0.203
-    User root
-    TCPKeepAlive yes
+#Host ogbox
+#    HostName 10.0.0.203
+#    User root
+#    TCPKeepAlive yes
 
 # Host codeserver
 #     HostName 10.0.0.203
