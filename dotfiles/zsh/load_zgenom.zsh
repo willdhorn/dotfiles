@@ -138,6 +138,22 @@ function load-zgenom() {
         done
     '
 
+    # dotnet
+    zgenom eval --name dotnet-completions '
+      _dotnet_zsh_complete() {
+        local completions=("$(dotnet complete "$words")")
+        # If the completion list is empty, just continue with filename selection
+        if [ -z "$completions" ]
+        then
+          _arguments "*::arguments: _normal"
+          return
+        fi
+        # This is not a variable assignment, do not remove spaces!
+        _values = "${(ps:\n:)completions}"
+      }
+      compdef _dotnet_zsh_complete dotnet
+    '
+
     # zsh-autosuggestions [must be loaded after fzf-tab]
     zgenom load zsh-users/zsh-autosuggestions # NOTE: zsh-autosuggestions needs to be loaded after all plugins that trigger complutions (i think...mainly fzf-tab)
 

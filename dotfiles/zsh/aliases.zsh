@@ -16,6 +16,7 @@ alias edb='edgedb'
 alias sync-brew='wdh-sync-brew'
 alias zgload='zgenom reset && load-zgenom'
 alias dn='dotnet'
+alias exz='exec zsh'
 
 # general
 # ls
