@@ -8,6 +8,14 @@ fi
 # setup p10k settings
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# silence warnings about output during promt initialization
+export POWERLEVEL9K_INSTANT_PROMPT=quiet 
+
+function compdef() {
+  echo "YOU ARE TRYING TO SET A ZSH COMPLETION FUNCTION BEFORE compinit IS RUN"
+  echo "PUT YOUR COMPLETIONS IN load_zgenom.zsh TO PREVENT THIS"
+}
+
 DOTFILES="$HOME/dotfiles"
 
 export ZSHDIR="$DOTFILES/zsh"
