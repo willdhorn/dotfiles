@@ -15,6 +15,7 @@ alias chez='chezmoi'
 alias edb='edgedb'
 alias sync-brew='wdh-sync-brew'
 alias zgload='zgenom reset && load-zgenom'
+alias dn='dotnet'
 
 # general
 # ls
