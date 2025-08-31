@@ -17,6 +17,7 @@ alias sync-brew='wdh-sync-brew'
 alias zgload='zgenom reset && load-zgenom'
 alias dn='dotnet'
 alias exz='exec zsh'
+alias cc='claude'
 
 # general
 # ls
