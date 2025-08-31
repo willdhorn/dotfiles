@@ -15,8 +15,8 @@ elif [[ -d "/opt/homebrew" ]]; then
 fi
 
 
-if has-cmd "zed"; then
-  export VISUAL="zed --wait"
+if has-cmd "nvim"; then
+  export VISUAL="nvim"
 else 
   export VISUAL="vim"
 fi
