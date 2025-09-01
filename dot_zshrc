@@ -9,6 +9,8 @@ fi
 export PATH="/Users/will/Library/Application Support/edgedb/bin:$PATH"
 # for codeium windsurf
 export PATH="/Users/will/.codeium/windsurf/bin:$PATH"
+# for flutter
+export PATH="/Users/will/flutter/bin:$PATH"
 
 # brew env vars and path
 if [[ -d "/usr/local/homebrew" ]]; then
