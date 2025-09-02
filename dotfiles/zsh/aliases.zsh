@@ -18,6 +18,8 @@ alias zgload='zgenom reset && load-zgenom'
 alias dn='dotnet'
 alias exz='exec zsh'
 alias cc='claude'
+alias rmrf='rm -rf'
+alias rmfr='rm -fr'
 
 # general
 # ls

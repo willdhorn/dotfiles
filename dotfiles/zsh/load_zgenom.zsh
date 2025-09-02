@@ -69,6 +69,7 @@ function load-zgenom() {
     # Color
     zgenom load zpm-zsh/colorize
     zgenom load chrissicool/zsh-256color # 256 color support
+    zgenom load $plugins_dir/colored-man-pages 
 
     # Alias
     zgenom load decayofmind/zsh-fast-alias-tips # gives hints/reminders after using a command that's been aliased
@@ -77,8 +78,8 @@ function load-zgenom() {
     export ZSH_FAST_ALIAS_TIPS_PREFIX="💡 $(tput bold)"
     export ZSH_FAST_ALIAS_TIPS_SUFFIX="$(tput sgr0)"
 
-    no-has-dir "$ZSHDIR/plugins" "git clone https://github.com/MefitHp/alias-maker.git ${plugins_dir}/alias-maker"
-    zgenom load "$plugins_dir/alias-maker"
+    #no-has-dir "$ZSHDIR/plugins" "git clone https://github.com/MefitHp/alias-maker.git ${plugins_dir}/alias-maker"
+    #zgenom load "$plugins_dir/alias-maker"
 
     # various zsh
     zgenom load mafredri/zsh-async
@@ -86,7 +87,8 @@ function load-zgenom() {
     export ZSHZ_TILDE=1
     export ZSHZ_CASE=smart
 
-    # local plugins copied from zsh-utlis
+    # local plugins copied from zsh-utlis (but doesn't work)
+    # (history.zsh only works because it's sourced manually)
     zgenom load "$plugins_dir/utils"
 
     # * Completions
